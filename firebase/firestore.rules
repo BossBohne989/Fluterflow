@@ -1,0 +1,180 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /Chat/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /Chat/{parent}/OrganisationsChat/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/OrganisationsChat/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /Chat_Groupe/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /Chat_Groupe/{parent}/Groupe_Message/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/Groupe_Message/{document} {
+      allow read: if true;
+    }
+
+
+    match /Agreement/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /Room/{parent}/User/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/User/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/countrie/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/countrie/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/Agenda/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/Agenda/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/solo_Agenda/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /{path=**}/solo_Agenda/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/Agendasuggestions/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /{path=**}/Agendasuggestions/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/Talk_Room/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/Talk_Room/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/GlobalGoals/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/GlobalGoals/{document} {
+      allow read: if true;
+    }
+
+
+    match /Room/{parent}/Goals/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /{path=**}/Goals/{document} {
+      allow read: if true;
+    }
+
+
+    match /UserCreate/{document} {
+      allow create: if request.auth.uid == document;
+      allow read: if true;
+      allow write: if request.auth.uid == document;
+      allow delete: if request.auth.uid == document;
+    }
+
+    match /Package_02/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /Package_01/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /Package_03/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+  }
+}

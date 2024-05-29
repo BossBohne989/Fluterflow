@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "447768866463",
+    "project_id": "wto-negotiation-game",
+    "storage_bucket": "wto-negotiation-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447768866463:android:c66055037f59f9a5817caa",
+        "android_client_info": {
+          "package_name": "com.mycompany.brettspiel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447768866463-5hig1k0f09ohlus5o81v3hk24l2avq65.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.brettspiel",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "447768866463-oav8kcakcnadq2o3u4q0lp4vc9mkml0d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3VYHF3xieqHxpwflqUdl67fxQyPvv-q0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447768866463-oav8kcakcnadq2o3u4q0lp4vc9mkml0d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "447768866463-hjg2pnrn1omj1mcqdhs6bqo57tbcigvo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.brettspiel"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
