@@ -184,6 +184,10 @@ class _MembersWTOChatWidgetState extends State<MembersWTOChatWidget> {
                                               stream:
                                                   queryOrganisationsChatRecord(
                                                 parent: FFAppState().activeChat,
+                                                queryBuilder:
+                                                    (organisationsChatRecord) =>
+                                                        organisationsChatRecord
+                                                            .orderBy('ts'),
                                               ),
                                               builder: (context, snapshot) {
                                                 // Customize what your widget looks like when it's loading.

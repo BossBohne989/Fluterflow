@@ -147,9 +147,8 @@ class _WTOEndWidgetState extends State<WTOEndWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 35.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            setState(() {
-                              FFAppState().Communique = true;
-                            });
+                            FFAppState().Communique = true;
+                            setState(() {});
 
                             context.pushNamed('WTOAllTargets');
                           },

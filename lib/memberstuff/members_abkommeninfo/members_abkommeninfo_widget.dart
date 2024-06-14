@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,6 +31,20 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
     super.initState();
     _model = createModel(context, () => MembersAbkommeninfoModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.agre =
+          await AgreementRecord.getDocumentOnce(FFAppState().activAgreement!);
+      if (functions.checkagrement(_model.agre!.userIDs.toList(), currentUserUid,
+          _model.agre!.status.toList())) {
+        FFAppState().Agreementused = true;
+        setState(() {});
+      } else {
+        FFAppState().Agreementused = false;
+        setState(() {});
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -48,27 +61,12 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
 
     return StreamBuilder<List<RoomRecord>>(
       stream: queryRoomRecord(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
-      )..listen((snapshot) async {
-          List<RoomRecord> membersAbkommeninfoRoomRecordList = snapshot;
-          final membersAbkommeninfoRoomRecord =
-              membersAbkommeninfoRoomRecordList.isNotEmpty
-                  ? membersAbkommeninfoRoomRecordList.first
-                  : null;
-          if (_model.membersAbkommeninfoPreviousSnapshot != null &&
-              !const ListEquality(RoomRecordDocumentEquality()).equals(
-                  membersAbkommeninfoRoomRecordList,
-                  _model.membersAbkommeninfoPreviousSnapshot)) {
-            _model.out = await RoomRecord.getDocumentOnce(
-                membersAbkommeninfoRoomRecord!.reference);
-            if (_model.out?.talkStart == true) {
-              context.pushNamed('MembersTalkRoom');
-            }
-
-            setState(() {});
-          }
-          _model.membersAbkommeninfoPreviousSnapshot = snapshot;
-        }),
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -116,8 +114,13 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                               Expanded(
                                 child: Align(
                                   alignment: AlignmentDirectional(0.0, -1.0),
-                                  child: StreamBuilder<List<RoomRecord>>(
-                                    stream: queryRoomRecord(
+                                  child: FutureBuilder<List<RoomRecord>>(
+                                    future: queryRoomRecordOnce(
+                                      queryBuilder: (roomRecord) =>
+                                          roomRecord.where(
+                                        'JoinCode',
+                                        isEqualTo: FFAppState().GameCode,
+                                      ),
                                       singleRecord: true,
                                     ),
                                     builder: (context, snapshot) {
@@ -194,11 +197,11 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                                           15.0,
                                                                           0.0,
                                                                           0.0),
-                                                                  child: StreamBuilder<
+                                                                  child: FutureBuilder<
                                                                       List<
                                                                           ChatRecord>>(
-                                                                    stream:
-                                                                        queryChatRecord(
+                                                                    future:
+                                                                        queryChatRecordOnce(
                                                                       queryBuilder:
                                                                           (chatRecord) =>
                                                                               chatRecord.where(
@@ -259,13 +262,6 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                                                 Radius.circular(0.0),
                                                                             topRight:
                                                                                 Radius.circular(500.0),
-                                                                          ),
-                                                                          border:
-                                                                              Border.all(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            width:
-                                                                                1.0,
                                                                           ),
                                                                         ),
                                                                         child:
@@ -336,7 +332,7 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                                             250.0),
                                                                     child: Image
                                                                         .asset(
-                                                                      'assets/images/wto-logo.png',
+                                                                      'assets/images/WorldTradeArena_Logo.png',
                                                                       width:
                                                                           75.0,
                                                                       height:
@@ -366,8 +362,15 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
+                                                              FFAppState()
+                                                                      .MemberHome =
+                                                                  true;
+                                                              FFAppState()
+                                                                      .MemberPreHome =
+                                                                  false;
+
                                                               context.pushNamed(
-                                                                  'MembersHome');
+                                                                  'MembersAllinOne');
                                                             },
                                                             text: 'Home',
                                                             options:
@@ -493,11 +496,10 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              setState(() {
-                                                                FFAppState()
-                                                                        .InfoText =
-                                                                    true;
-                                                              });
+                                                              FFAppState()
+                                                                      .InfoText =
+                                                                  true;
+                                                              setState(() {});
                                                             },
                                                             text: 'Infos',
                                                             options:
@@ -620,8 +622,12 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
+                                                              FFAppState()
+                                                                      .MemberAbkommen =
+                                                                  true;
+
                                                               context.pushNamed(
-                                                                  'MembersAbkommen');
+                                                                  'MembersAllinOne');
                                                             },
                                                             text: 'Agreement',
                                                             options:
@@ -700,7 +706,7 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                                           8.0),
                                                               child:
                                                                   Image.asset(
-                                                                'assets/images/settings_blue.png',
+                                                                'assets/images/Bild_2024-05-29_145540621.png',
                                                                 width: 40.0,
                                                                 height: 40.0,
                                                                 fit: BoxFit
@@ -754,33 +760,352 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                       ),
                       Expanded(
                         flex: 7,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                width: 558.0,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF153172),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: Container(
-                                        width: 320.0,
-                                        height: 485.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFF8F8F8),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                width: 100.0,
+                                height: 591.0,
+                                decoration: BoxDecoration(),
+                                child: Container(
+                                  width: 558.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF153172),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0.0, -1.0),
+                                        child: Container(
+                                          width: 320.0,
+                                          height: 485.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFF8F8F8),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.all(20.0),
+                                                child: StreamBuilder<
+                                                    AgreementRecord>(
+                                                  stream: AgreementRecord
+                                                      .getDocument(FFAppState()
+                                                          .activAgreement!),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    final containerAgreementRecord =
+                                                        snapshot.data!;
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFF1C1C1C),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                        border: Border.all(
+                                                          color: Colors.black,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      child: Stack(
+                                                        children: [
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    0.0, -0.95),
+                                                            child: Text(
+                                                              containerAgreementRecord
+                                                                  .title,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        24.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    -0.9,
+                                                                    -0.71),
+                                                            child: Text(
+                                                              'description',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    -0.91,
+                                                                    -0.58),
+                                                            child: Text(
+                                                              containerAgreementRecord
+                                                                  .descripton,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          if (FFAppState()
+                                                                  .Agreementused ==
+                                                              false)
+                                                            Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      -0.83,
+                                                                      0.9),
+                                                              child:
+                                                                  FFButtonWidget(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await containerAgreementRecord
+                                                                      .reference
+                                                                      .update({
+                                                                    ...createAgreementRecordData(
+                                                                      check: functions
+                                                                          .checkcounter(
+                                                                              containerAgreementRecord.check),
+                                                                    ),
+                                                                    ...mapToFirestore(
+                                                                      {
+                                                                        'Status':
+                                                                            FieldValue.arrayUnion([
+                                                                          false
+                                                                        ]),
+                                                                      },
+                                                                    ),
+                                                                  });
+                                                                  FFAppState()
+                                                                          .Agreementused =
+                                                                      true;
+                                                                  setState(
+                                                                      () {});
+                                                                  FFAppState()
+                                                                          .MemberAbkommen =
+                                                                      true;
+                                                                  FFAppState()
+                                                                          .MemberPreHome =
+                                                                      false;
+                                                                  FFAppState()
+                                                                          .MemberHome =
+                                                                      false;
+
+                                                                  context.pushNamed(
+                                                                      'MembersAllinOne');
+                                                                },
+                                                                text: 'decline',
+                                                                options:
+                                                                    FFButtonOptions(
+                                                                  height: 40.0,
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          24.0,
+                                                                          0.0,
+                                                                          24.0,
+                                                                          0.0),
+                                                                  iconPadding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  color: Color(
+                                                                      0xFFCB2B11),
+                                                                  textStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                                  elevation:
+                                                                      3.0,
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          if (FFAppState()
+                                                                  .Agreementused ==
+                                                              false)
+                                                            Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0.83,
+                                                                      0.9),
+                                                              child:
+                                                                  FFButtonWidget(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await containerAgreementRecord
+                                                                      .reference
+                                                                      .update({
+                                                                    ...createAgreementRecordData(
+                                                                      check: functions
+                                                                          .checkcounter(
+                                                                              containerAgreementRecord.check),
+                                                                    ),
+                                                                    ...mapToFirestore(
+                                                                      {
+                                                                        'Status':
+                                                                            FieldValue.arrayUnion([
+                                                                          true
+                                                                        ]),
+                                                                      },
+                                                                    ),
+                                                                  });
+                                                                  FFAppState()
+                                                                          .Agreementused =
+                                                                      true;
+                                                                  setState(
+                                                                      () {});
+                                                                  FFAppState()
+                                                                          .MemberAbkommen =
+                                                                      true;
+                                                                  FFAppState()
+                                                                          .MemberPreHome =
+                                                                      false;
+                                                                  FFAppState()
+                                                                          .MemberHome =
+                                                                      false;
+
+                                                                  context.pushNamed(
+                                                                      'MembersAllinOne');
+                                                                },
+                                                                text: 'accept',
+                                                                options:
+                                                                    FFButtonOptions(
+                                                                  height: 40.0,
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          24.0,
+                                                                          0.0,
+                                                                          24.0,
+                                                                          0.0),
+                                                                  iconPadding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  color: Color(
+                                                                      0xFF1C9212),
+                                                                  textStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                                  elevation:
+                                                                      3.0,
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                      ),
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0.0, 1.0),
                                         child: Padding(
-                                          padding: EdgeInsets.all(20.0),
-                                          child: StreamBuilder<AgreementRecord>(
-                                            stream: AgreementRecord.getDocument(
-                                                FFAppState().activAgreement!),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 50.0),
+                                          child: FutureBuilder<
+                                              List<AgreementRecord>>(
+                                            future: queryAgreementRecordOnce(
+                                              singleRecord: true,
+                                            ),
                                             builder: (context, snapshot) {
                                               // Customize what your widget looks like when it's loading.
                                               if (!snapshot.hasData) {
@@ -801,329 +1126,61 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                   ),
                                                 );
                                               }
-                                              final containerAgreementRecord =
+                                              List<AgreementRecord>
+                                                  buttonAgreementRecordList =
                                                   snapshot.data!;
-                                              return Container(
-                                                width: 50.0,
-                                                height: 16.0,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFF1C1C1C),
+                                              final buttonAgreementRecord =
+                                                  buttonAgreementRecordList
+                                                          .isNotEmpty
+                                                      ? buttonAgreementRecordList
+                                                          .first
+                                                      : null;
+                                              return FFButtonWidget(
+                                                onPressed: () async {
+                                                  context.safePop();
+                                                },
+                                                text: 'Back',
+                                                options: FFButtonOptions(
+                                                  width: 189.0,
+                                                  height: 40.0,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          24.0, 0.0, 24.0, 0.0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
+                                                  color: Color(0xFF161616),
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                  elevation: 3.0,
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1.0,
+                                                  ),
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          20.0),
-                                                  border: Border.all(
-                                                    color: Colors.black,
-                                                    width: 1.5,
-                                                  ),
-                                                ),
-                                                child: Stack(
-                                                  children: [
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.0, -0.95),
-                                                      child: Text(
-                                                        containerAgreementRecord
-                                                            .title,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Readex Pro',
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 24.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -0.9, -0.71),
-                                                      child: Text(
-                                                        'description',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Readex Pro',
-                                                              color:
-                                                                  Colors.white,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -0.91, -0.58),
-                                                      child: Text(
-                                                        containerAgreementRecord
-                                                            .descripton,
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Readex Pro',
-                                                              color:
-                                                                  Colors.white,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    if (FFAppState()
-                                                            .Agreementused ==
-                                                        false)
-                                                      Align(
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                -0.83, 0.9),
-                                                        child: FFButtonWidget(
-                                                          onPressed: () async {
-                                                            await containerAgreementRecord
-                                                                .reference
-                                                                .update(
-                                                                    createAgreementRecordData(
-                                                              descripton: '',
-                                                            ));
-                                                            setState(() {
-                                                              FFAppState()
-                                                                      .Agreementused =
-                                                                  true;
-                                                            });
-
-                                                            context.pushNamed(
-                                                                'MembersAbkommen');
-                                                          },
-                                                          text: 'decline',
-                                                          options:
-                                                              FFButtonOptions(
-                                                            height: 40.0,
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        24.0,
-                                                                        0.0,
-                                                                        24.0,
-                                                                        0.0),
-                                                            iconPadding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            color: Color(
-                                                                0xFFCB2B11),
-                                                            textStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                    ),
-                                                            elevation: 3.0,
-                                                            borderSide:
-                                                                BorderSide(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              width: 1.0,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    if (FFAppState()
-                                                            .Agreementused ==
-                                                        false)
-                                                      Align(
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.83, 0.9),
-                                                        child: FFButtonWidget(
-                                                          onPressed: () async {
-                                                            await containerAgreementRecord
-                                                                .reference
-                                                                .update({
-                                                              ...mapToFirestore(
-                                                                {
-                                                                  'Status':
-                                                                      FieldValue
-                                                                          .arrayUnion([
-                                                                    true
-                                                                  ]),
-                                                                },
-                                                              ),
-                                                            });
-                                                            setState(() {
-                                                              FFAppState()
-                                                                      .Agreementused =
-                                                                  true;
-                                                            });
-                                                            if (functions.checkagreement(
-                                                                    containerAgreementRecord
-                                                                        .teams
-                                                                        .toList(),
-                                                                    containerAgreementRecord
-                                                                        .status
-                                                                        .toList()) ==
-                                                                true) {
-                                                              await containerAgreementRecord
-                                                                  .reference
-                                                                  .update(
-                                                                      createAgreementRecordData(
-                                                                statusCol: Color(
-                                                                    0xFF1C9212),
-                                                              ));
-                                                            } else {
-                                                              await containerAgreementRecord
-                                                                  .reference
-                                                                  .update(
-                                                                      createAgreementRecordData(
-                                                                statusCol: Color(
-                                                                    0xFFCE2323),
-                                                              ));
-                                                            }
-
-                                                            context.pushNamed(
-                                                                'MembersAbkommen');
-                                                          },
-                                                          text: 'accept',
-                                                          options:
-                                                              FFButtonOptions(
-                                                            height: 40.0,
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        24.0,
-                                                                        0.0,
-                                                                        24.0,
-                                                                        0.0),
-                                                            iconPadding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            color: Color(
-                                                                0xFF1C9212),
-                                                            textStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                    ),
-                                                            elevation: 3.0,
-                                                            borderSide:
-                                                                BorderSide(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              width: 1.0,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    if (FFAppState()
-                                                            .Agreementused ==
-                                                        true)
-                                                      Align(
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                -0.01, 0.9),
-                                                        child: FFButtonWidget(
-                                                          onPressed: () async {
-                                                            context.safePop();
-                                                          },
-                                                          text: 'Back',
-                                                          options:
-                                                              FFButtonOptions(
-                                                            width: 150.0,
-                                                            height: 40.0,
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        24.0,
-                                                                        0.0,
-                                                                        24.0,
-                                                                        0.0),
-                                                            iconPadding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            color: Color(
-                                                                0xFFF8F8F8),
-                                                            textStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Color(
-                                                                          0xFF0D0D0D),
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                    ),
-                                                            elevation: 3.0,
-                                                            borderSide:
-                                                                BorderSide(
-                                                              color: Color(
-                                                                  0xFF0D0D0D),
-                                                              width: 2.0,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                  ],
+                                                          8.0),
                                                 ),
                                               );
                                             },
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -1185,10 +1242,9 @@ class _MembersAbkommeninfoWidgetState extends State<MembersAbkommeninfoWidget> {
                                                         0.0, 5.0, 10.0, 0.0),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
-                                                    setState(() {
-                                                      FFAppState().InfoText =
-                                                          false;
-                                                    });
+                                                    FFAppState().InfoText =
+                                                        false;
+                                                    setState(() {});
                                                   },
                                                   text: 'Ok\n',
                                                   options: FFButtonOptions(

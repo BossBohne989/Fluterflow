@@ -103,17 +103,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => RegistrationWidget(),
         ),
         FFRoute(
-          name: 'MembersHome',
-          path: '/membersHome',
-          builder: (context, params) => MembersHomeWidget(
-            wto: params.getParam<String>(
-              'wto',
-              ParamType.String,
-              isList: true,
-            ),
-          ),
-        ),
-        FFRoute(
           name: 'MembersProfil',
           path: '/membersProfil',
           builder: (context, params) => MembersProfilWidget(),
@@ -178,11 +167,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => CreateGroupChatPageWidget(),
         ),
         FFRoute(
-          name: 'MembersTalkRoom',
-          path: '/membersTalkRoom',
-          builder: (context, params) => MembersTalkRoomWidget(),
-        ),
-        FFRoute(
           name: 'MembersChat',
           path: '/membersChat',
           builder: (context, params) => MembersChatWidget(),
@@ -223,11 +207,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => WTOInformationPageWidget(),
         ),
         FFRoute(
-          name: 'MembersAbkommen',
-          path: '/membersAbkommen',
-          builder: (context, params) => MembersAbkommenWidget(),
-        ),
-        FFRoute(
           name: 'MembersAbkommeninfo',
           path: '/MembersAbkommeninfo',
           builder: (context, params) => MembersAbkommeninfoWidget(),
@@ -266,17 +245,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Phase5',
           path: '/phase5',
           builder: (context, params) => Phase5Widget(),
-        ),
-        FFRoute(
-          name: 'MembersPreAgenda',
-          path: '/membersPreAgenda',
-          builder: (context, params) => MembersPreAgendaWidget(
-            wto: params.getParam<String>(
-              'wto',
-              ParamType.String,
-              isList: true,
-            ),
-          ),
         ),
         FFRoute(
           name: 'WTOPreAgenda',
@@ -359,9 +327,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => WTOPreTalkRoomWidget(),
         ),
         FFRoute(
-          name: 'MembersPreTalkRoom',
-          path: '/membersPreTalkRoom',
-          builder: (context, params) => MembersPreTalkRoomWidget(),
+          name: 'MembersTalkRoom',
+          path: '/membersTalkRoom',
+          builder: (context, params) => MembersTalkRoomWidget(),
         ),
         FFRoute(
           name: 'Game_Settings_Selection',
@@ -394,17 +362,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SponsorWidget(),
         ),
         FFRoute(
-          name: 'membersGoals',
-          path: '/membersGoals',
-          builder: (context, params) => MembersGoalsWidget(),
-        ),
-        FFRoute(
           name: 'MembersAllinOne',
           path: '/membersAllinOne',
           builder: (context, params) => MembersAllinOneWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
-      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {

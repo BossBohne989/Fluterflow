@@ -47,8 +47,12 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<RoomRecord>>(
-      stream: queryRoomRecord(
+    return FutureBuilder<List<RoomRecord>>(
+      future: queryRoomRecordOnce(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -91,73 +95,55 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Expanded(
-                          flex: 3,
-                          child: Align(
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Align(
-                                    alignment: AlignmentDirectional(0.0, -1.0),
-                                    child: StreamBuilder<List<RoomRecord>>(
-                                      stream: queryRoomRecord(
-                                        singleRecord: true,
-                                      ),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 50.0,
-                                              height: 50.0,
-                                              child: CircularProgressIndicator(
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                        Color>(
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        List<RoomRecord>
-                                            containerRoomRecordList =
-                                            snapshot.data!;
-                                        final containerRoomRecord =
-                                            containerRoomRecordList.isNotEmpty
-                                                ? containerRoomRecordList.first
-                                                : null;
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFF153172),
-                                          ),
-                                          child: Stack(
-                                            children: [
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 25.0, 0.0, 0.0),
-                                                  child: Container(
-                                                    width: 418.0,
-                                                    height: 160.0,
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xFF365DB6),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25.0),
-                                                    ),
-                                                    child: Stack(
-                                                      children: [
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  0.0, -1.0),
+                          flex: 4,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.0, 1.0),
+                                  child: Container(
+                                    height: 339.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF153172),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        if (membersPreGoalsRoomRecord
+                                                ?.finishAgendaCreate ==
+                                            false)
+                                          Align(
+                                            alignment:
+                                                AlignmentDirectional(0.0, 1.0),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: SafeArea(
+                                                child: Container(
+                                                  width: 427.0,
+                                                  height: 180.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFF365DB6),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      80.0),
                                                           child: Container(
                                                             width: 414.0,
                                                             height: 100.0,
@@ -181,11 +167,11 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                                             15.0,
                                                                             0.0,
                                                                             0.0),
-                                                                    child: StreamBuilder<
+                                                                    child: FutureBuilder<
                                                                         List<
                                                                             ChatRecord>>(
-                                                                      stream:
-                                                                          queryChatRecord(
+                                                                      future:
+                                                                          queryChatRecordOnce(
                                                                         queryBuilder:
                                                                             (chatRecord) =>
                                                                                 chatRecord.where(
@@ -221,60 +207,41 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                                         final containerChatRecord = containerChatRecordList.isNotEmpty
                                                                             ? containerChatRecordList.first
                                                                             : null;
-                                                                        return InkWell(
-                                                                          splashColor:
-                                                                              Colors.transparent,
-                                                                          focusColor:
-                                                                              Colors.transparent,
-                                                                          hoverColor:
-                                                                              Colors.transparent,
-                                                                          highlightColor:
-                                                                              Colors.transparent,
-                                                                          onTap:
-                                                                              () async {
-                                                                            setState(() {
-                                                                              FFAppState().activeChat = containerChatRecord?.reference;
-                                                                            });
-
-                                                                            context.pushNamed('MembersWTOChat');
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            width:
-                                                                                250.0,
-                                                                            height:
-                                                                                68.0,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Color(0xFF161616),
-                                                                              borderRadius: BorderRadius.only(
-                                                                                bottomLeft: Radius.circular(0.0),
-                                                                                bottomRight: Radius.circular(500.0),
-                                                                                topLeft: Radius.circular(0.0),
-                                                                                topRight: Radius.circular(500.0),
-                                                                              ),
-                                                                              border: Border.all(
-                                                                                color: Colors.black,
-                                                                                width: 1.0,
-                                                                              ),
+                                                                        return Container(
+                                                                          width:
+                                                                              250.0,
+                                                                          height:
+                                                                              68.0,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Color(0xFF161616),
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              bottomLeft: Radius.circular(0.0),
+                                                                              bottomRight: Radius.circular(500.0),
+                                                                              topLeft: Radius.circular(0.0),
+                                                                              topRight: Radius.circular(500.0),
                                                                             ),
-                                                                            child:
-                                                                                Stack(
-                                                                              children: [
-                                                                                Align(
-                                                                                  alignment: AlignmentDirectional(0.0, -1.0),
-                                                                                  child: Text(
-                                                                                    'WTO communication',
-                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                          fontFamily: 'Readex Pro',
-                                                                                          color: Colors.white,
-                                                                                          fontSize: 18.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                        ),
-                                                                                  ),
+                                                                          ),
+                                                                          child:
+                                                                              Stack(
+                                                                            children: [
+                                                                              Align(
+                                                                                alignment: AlignmentDirectional(0.0, -1.0),
+                                                                                child: Text(
+                                                                                  'WTO Information',
+                                                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                        fontFamily: 'Readex Pro',
+                                                                                        color: Colors.white,
+                                                                                        letterSpacing: 0.0,
+                                                                                      ),
                                                                                 ),
-                                                                                Align(
-                                                                                  alignment: AlignmentDirectional(0.95, -0.03),
+                                                                              ),
+                                                                              Align(
+                                                                                alignment: AlignmentDirectional(1.0, 0.0),
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     valueOrDefault<String>(
                                                                                       dateTimeFormat('Hm', containerChatRecord?.ts),
@@ -287,13 +254,17 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                                                         ),
                                                                                   ),
                                                                                 ),
-                                                                                Align(
-                                                                                  alignment: AlignmentDirectional(-0.06, -0.03),
+                                                                              ),
+                                                                              Align(
+                                                                                alignment: AlignmentDirectional(0.0, 0.0),
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     valueOrDefault<String>(
                                                                                       containerChatRecord?.importantmessagetext,
                                                                                       '-',
-                                                                                    ).maybeHandleOverflow(maxChars: 23),
+                                                                                    ).maybeHandleOverflow(maxChars: 17),
+                                                                                    textAlign: TextAlign.start,
                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                           fontFamily: 'Readex Pro',
                                                                                           color: Colors.white,
@@ -301,8 +272,8 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                                                         ),
                                                                                   ),
                                                                                 ),
-                                                                              ],
-                                                                            ),
+                                                                              ),
+                                                                            ],
                                                                           ),
                                                                         );
                                                                       },
@@ -329,7 +300,7 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                                               250.0),
                                                                       child: Image
                                                                           .asset(
-                                                                        'assets/images/wto-logo.png',
+                                                                        'assets/images/WorldTradeArena_Logo.png',
                                                                         width:
                                                                             75.0,
                                                                         height:
@@ -344,442 +315,768 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  0.0, 0.0),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        80.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child:
-                                                                FFButtonWidget(
-                                                              onPressed:
-                                                                  () async {
-                                                                context.pushNamed(
-                                                                    'MembersPreAgenda');
-                                                              },
-                                                              text: 'Agenda',
-                                                              options:
-                                                                  FFButtonOptions(
-                                                                width: 100.0,
-                                                                height: 25.0,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            0.0),
-                                                                iconPadding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                color: Color(
-                                                                    0xFF161616),
-                                                                textStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      60.0),
+                                                          child: FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              FFAppState()
+                                                                      .MemberPreHome =
+                                                                  true;
+                                                              FFAppState()
+                                                                      .MemberHome =
+                                                                  false;
+
+                                                              context.pushNamed(
+                                                                  'MembersAllinOne');
+                                                            },
+                                                            text: 'Home',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 100.0,
+                                                              height: 25.0,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
                                                                           0.0,
-                                                                    ),
-                                                                elevation: 3.0,
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50.0),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  -1.0, 0.0),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        35.0,
-                                                                        80.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child:
-                                                                FFButtonWidget(
-                                                              onPressed:
-                                                                  () async {
-                                                                context.pushNamed(
-                                                                    'MembersChat');
-                                                              },
-                                                              text: 'Chat',
-                                                              options:
-                                                                  FFButtonOptions(
-                                                                width: 100.0,
-                                                                height: 25.0,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            0.0),
-                                                                iconPadding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                color: Color(
-                                                                    0xFF161616),
-                                                                textStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
                                                                           0.0,
-                                                                    ),
-                                                                elevation: 3.0,
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50.0),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  1.0, 0.0),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        80.0,
-                                                                        35.0,
-                                                                        0.0),
-                                                            child:
-                                                                FFButtonWidget(
-                                                              onPressed:
-                                                                  () async {
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .InfoText =
-                                                                      true;
-                                                                });
-                                                              },
-                                                              text: 'Info',
-                                                              options:
-                                                                  FFButtonOptions(
-                                                                width: 100.0,
-                                                                height: 25.0,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            0.0),
-                                                                iconPadding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                color: Color(
-                                                                    0xFF161616),
-                                                                textStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
                                                                           0.0,
-                                                                    ),
-                                                                elevation: 3.0,
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50.0),
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF161616),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                              elevation: 3.0,
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      15.0),
+                                                          child: FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              context.pushNamed(
+                                                                  'MembersTalkRoom');
+                                                            },
+                                                            text: 'Talk',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 100.0,
+                                                              height: 25.0,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF161616),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                              elevation: 3.0,
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                1.0, 1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      5.0,
+                                                                      60.0),
+                                                          child: FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              FFAppState()
+                                                                      .InfoText =
+                                                                  true;
+                                                              setState(() {});
+                                                            },
+                                                            text: 'Infos',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 100.0,
+                                                              height: 25.0,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF161616),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                              elevation: 3.0,
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                -1.0, 1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      5.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      60.0),
+                                                          child: FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              context.pushNamed(
+                                                                  'MembersChat');
+                                                            },
+                                                            text: 'Chat',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 100.0,
+                                                              height: 25.0,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF161616),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Colors
+                                                                            .white,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                      ),
+                                                              elevation: 3.0,
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                1.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      15.0,
+                                                                      5.0,
+                                                                      0.0),
+                                                          child: InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              context.pushNamed(
+                                                                  'MembersProfil');
+                                                            },
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                              child:
+                                                                  Image.asset(
+                                                                'assets/images/Bild_2024-05-29_145540621.png',
+                                                                width: 40.0,
+                                                                height: 40.0,
+                                                                fit: BoxFit
+                                                                    .contain,
                                                               ),
                                                             ),
                                                           ),
                                                         ),
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  1.0, -1.0),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        15.0,
-                                                                        15.0,
-                                                                        0.0),
-                                                            child: InkWell(
-                                                              splashColor: Colors
-                                                                  .transparent,
-                                                              focusColor: Colors
-                                                                  .transparent,
-                                                              hoverColor: Colors
-                                                                  .transparent,
-                                                              highlightColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              onTap: () async {
-                                                                context.pushNamed(
-                                                                    'MembersProfil');
-                                                              },
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/settings_blue.png',
-                                                                  width: 40.0,
-                                                                  height: 40.0,
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        );
-                                      },
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                        Expanded(
+                        Flexible(
                           flex: 8,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: StreamBuilder<List<GoalsRecord>>(
-                                  stream: queryGoalsRecord(
-                                    singleRecord: true,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Container(
+                                  width: 100.0,
+                                  height: 570.0,
+                                  decoration: BoxDecoration(),
+                                  child: FutureBuilder<List<GoalsRecord>>(
+                                    future: queryGoalsRecordOnce(
+                                      singleRecord: true,
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
                                             ),
                                           ),
+                                        );
+                                      }
+                                      List<GoalsRecord>
+                                          containerGoalsRecordList =
+                                          snapshot.data!;
+                                      final containerGoalsRecord =
+                                          containerGoalsRecordList.isNotEmpty
+                                              ? containerGoalsRecordList.first
+                                              : null;
+                                      return Container(
+                                        width: 591.0,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF153172),
                                         ),
-                                      );
-                                    }
-                                    List<GoalsRecord> containerGoalsRecordList =
-                                        snapshot.data!;
-                                    final containerGoalsRecord =
-                                        containerGoalsRecordList.isNotEmpty
-                                            ? containerGoalsRecordList.first
-                                            : null;
-                                    return Container(
-                                      width: 591.0,
-                                      height: 100.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF153172),
-                                      ),
-                                      child: StreamBuilder<List<UserRecord>>(
-                                        stream: queryUserRecord(
-                                          queryBuilder: (userRecord) =>
-                                              userRecord.where(
-                                            'uid',
-                                            isEqualTo: currentUserUid,
+                                        child: FutureBuilder<List<UserRecord>>(
+                                          future: queryUserRecordOnce(
+                                            queryBuilder: (userRecord) =>
+                                                userRecord.where(
+                                              'uid',
+                                              isEqualTo: currentUserUid,
+                                            ),
+                                            singleRecord: true,
                                           ),
-                                          singleRecord: true,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primary,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          }
-                                          List<UserRecord> stackUserRecordList =
-                                              snapshot.data!;
-                                          final stackUserRecord =
-                                              stackUserRecordList.isNotEmpty
-                                                  ? stackUserRecordList.first
-                                                  : null;
-                                          return Stack(
-                                            children: [
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, -1.0),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 180.0, 0.0, 0.0),
-                                                  child: Container(
-                                                    width: 360.0,
-                                                    child: TextFormField(
-                                                      controller:
-                                                          _model.textController,
-                                                      focusNode: _model
-                                                          .textFieldFocusNode,
-                                                      autofocus: false,
-                                                      textCapitalization:
-                                                          TextCapitalization
-                                                              .none,
-                                                      obscureText: false,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        labelStyle:
+                                              );
+                                            }
+                                            List<UserRecord>
+                                                stackUserRecordList =
+                                                snapshot.data!;
+                                            final stackUserRecord =
+                                                stackUserRecordList.isNotEmpty
+                                                    ? stackUserRecordList.first
+                                                    : null;
+                                            return Stack(
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, -1.0),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0.0,
+                                                                180.0,
+                                                                0.0,
+                                                                0.0),
+                                                    child: Container(
+                                                      width: 360.0,
+                                                      child: TextFormField(
+                                                        controller: _model
+                                                            .textController,
+                                                        focusNode: _model
+                                                            .textFieldFocusNode,
+                                                        autofocus: false,
+                                                        textCapitalization:
+                                                            TextCapitalization
+                                                                .none,
+                                                        obscureText: false,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          labelStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                          alignLabelWithHint:
+                                                              false,
+                                                          hintText:
+                                                              'Write a goal here, after choosing an item \nfrom the agenda.',
+                                                          hintStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color: Color(
+                                                                  0xFF161616),
+                                                              width: 2.0,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6.0),
+                                                          ),
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primary,
+                                                              width: 2.0,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6.0),
+                                                          ),
+                                                          errorBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .error,
+                                                              width: 2.0,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6.0),
+                                                          ),
+                                                          focusedErrorBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .error,
+                                                              width: 2.0,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6.0),
+                                                          ),
+                                                          filled: true,
+                                                          fillColor:
+                                                              Color(0xFF161616),
+                                                        ),
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              color:
+                                                                  Colors.white,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                            ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        maxLines: 4,
+                                                        maxLength: 25,
+                                                        maxLengthEnforcement:
+                                                            MaxLengthEnforcement
+                                                                .enforced,
+                                                        validator: _model
+                                                            .textControllerValidator
+                                                            .asValidator(
+                                                                context),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, -1.0),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                200.0,
+                                                                325.0,
+                                                                0.0,
+                                                                0.0),
+                                                    child: FFButtonWidget(
+                                                      onPressed: () async {
+                                                        await GoalsRecord.createDoc(
+                                                                containerGoalsRecord!
+                                                                    .parentReference)
+                                                            .set(
+                                                                createGoalsRecordData(
+                                                          team: stackUserRecord
+                                                              ?.team,
+                                                          goal: _model
+                                                              .textController
+                                                              .text,
+                                                          targetsToAgenda: _model
+                                                              .dropDownValue,
+                                                          teamIMG:
+                                                              stackUserRecord
+                                                                  ?.teamIMG,
+                                                        ));
+                                                        setState(() {
+                                                          _model.textController
+                                                              ?.clear();
+                                                        });
+                                                      },
+                                                      text: 'Submit goal',
+                                                      options: FFButtonOptions(
+                                                        width: 120.0,
+                                                        height: 24.0,
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    24.0,
+                                                                    0.0,
+                                                                    24.0,
+                                                                    0.0),
+                                                        iconPadding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        color:
+                                                            Color(0xFFFFBA08),
+                                                        textStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyMedium
+                                                                .titleSmall
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
                                                                   color: Colors
-                                                                      .white,
+                                                                      .black,
                                                                   fontSize:
                                                                       14.0,
                                                                   letterSpacing:
                                                                       0.0,
                                                                 ),
-                                                        alignLabelWithHint:
-                                                            false,
-                                                        hintText:
-                                                            'Write a goal here, after choosing an item \nfrom the agenda.',
-                                                        hintStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Colors
-                                                                      .white,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                ),
-                                                        enabledBorder:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: Color(
-                                                                0xFF161616),
-                                                            width: 2.0,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      6.0),
+                                                        elevation: 3.0,
+                                                        borderSide: BorderSide(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: 1.0,
                                                         ),
-                                                        focusedBorder:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primary,
-                                                            width: 2.0,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      6.0),
-                                                        ),
-                                                        errorBorder:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .error,
-                                                            width: 2.0,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      6.0),
-                                                        ),
-                                                        focusedErrorBorder:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .error,
-                                                            width: 2.0,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      6.0),
-                                                        ),
-                                                        filled: true,
-                                                        fillColor:
-                                                            Color(0xFF161616),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(29.0),
                                                       ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, -1.0),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0.0,
+                                                                120.0,
+                                                                0.0,
+                                                                0.0),
+                                                    child: FutureBuilder<
+                                                        List<AgendaRecord>>(
+                                                      future:
+                                                          queryAgendaRecordOnce(
+                                                        singleRecord: true,
+                                                      ),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        // Customize what your widget looks like when it's loading.
+                                                        if (!snapshot.hasData) {
+                                                          return Center(
+                                                            child: SizedBox(
+                                                              width: 50.0,
+                                                              height: 50.0,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                valueColor:
+                                                                    AlwaysStoppedAnimation<
+                                                                        Color>(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primary,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+                                                        List<AgendaRecord>
+                                                            dropDownAgendaRecordList =
+                                                            snapshot.data!;
+                                                        final dropDownAgendaRecord =
+                                                            dropDownAgendaRecordList
+                                                                    .isNotEmpty
+                                                                ? dropDownAgendaRecordList
+                                                                    .first
+                                                                : null;
+                                                        return FlutterFlowDropDown<
+                                                            String>(
+                                                          controller: _model
+                                                                  .dropDownValueController ??=
+                                                              FormFieldController<
+                                                                  String>(
+                                                            _model.dropDownValue ??=
+                                                                '',
+                                                          ),
+                                                          options: List<
+                                                                  String>.from(
+                                                              dropDownAgendaRecord!
+                                                                  .agendas),
+                                                          optionLabels:
+                                                              dropDownAgendaRecord!
+                                                                  .agendas,
+                                                          onChanged: (val) =>
+                                                              setState(() =>
+                                                                  _model.dropDownValue =
+                                                                      val),
+                                                          width: 213.0,
+                                                          height: 43.0,
+                                                          textStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                          hintText:
+                                                              'Agenda item',
+                                                          icon: Icon(
+                                                            Icons
+                                                                .keyboard_arrow_down_rounded,
+                                                            color: Colors.white,
+                                                            size: 24.0,
+                                                          ),
+                                                          fillColor:
+                                                              Color(0xFF153172),
+                                                          elevation: 2.0,
+                                                          borderColor:
+                                                              Colors.black,
+                                                          borderWidth: 2.0,
+                                                          borderRadius: 8.0,
+                                                          margin:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      16.0,
+                                                                      4.0,
+                                                                      16.0,
+                                                                      4.0),
+                                                          hidesUnderline: true,
+                                                          isSearchable: false,
+                                                          isMultiSelect: false,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, -1.0),
+                                                  child: Text(
+                                                    'Team-leader\ngoal management',
+                                                    textAlign: TextAlign.center,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          color: Colors.white,
+                                                          fontSize: 30.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, -1.0),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 80.0,
+                                                                0.0, 0.0),
+                                                    child: Text(
+                                                      'Only the team-leader can view this page.',
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyMedium
@@ -789,248 +1086,19 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                             color: Colors.white,
                                                             letterSpacing: 0.0,
                                                           ),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      maxLines: 4,
-                                                      maxLength: 17,
-                                                      maxLengthEnforcement:
-                                                          MaxLengthEnforcement
-                                                              .enforced,
-                                                      validator: _model
-                                                          .textControllerValidator
-                                                          .asValidator(context),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, -1.0),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(200.0, 325.0,
-                                                          0.0, 0.0),
-                                                  child: FFButtonWidget(
-                                                    onPressed: () async {
-                                                      await GoalsRecord.createDoc(
-                                                              containerGoalsRecord!
-                                                                  .parentReference)
-                                                          .set(
-                                                              createGoalsRecordData(
-                                                        team: stackUserRecord
-                                                            ?.team,
-                                                        goal: _model
-                                                            .textController
-                                                            .text,
-                                                        targetsToAgenda: _model
-                                                            .dropDownValue,
-                                                        teamIMG: stackUserRecord
-                                                            ?.teamIMG,
-                                                      ));
-                                                      setState(() {
-                                                        _model.textController
-                                                            ?.clear();
-                                                      });
-                                                    },
-                                                    text: 'Submit goal',
-                                                    options: FFButtonOptions(
-                                                      width: 120.0,
-                                                      height: 24.0,
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  24.0,
-                                                                  0.0,
-                                                                  24.0,
-                                                                  0.0),
-                                                      iconPadding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      color: Color(0xFFFFBA08),
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 14.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                              ),
-                                                      elevation: 3.0,
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            Colors.transparent,
-                                                        width: 1.0,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              29.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, -1.0),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 120.0, 0.0, 0.0),
-                                                  child: FutureBuilder<
-                                                      List<AgendaRecord>>(
-                                                    future:
-                                                        queryAgendaRecordOnce(
-                                                      singleRecord: true,
-                                                    ),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      // Customize what your widget looks like when it's loading.
-                                                      if (!snapshot.hasData) {
-                                                        return Center(
-                                                          child: SizedBox(
-                                                            width: 50.0,
-                                                            height: 50.0,
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              valueColor:
-                                                                  AlwaysStoppedAnimation<
-                                                                      Color>(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primary,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      }
-                                                      List<AgendaRecord>
-                                                          dropDownAgendaRecordList =
-                                                          snapshot.data!;
-                                                      final dropDownAgendaRecord =
-                                                          dropDownAgendaRecordList
-                                                                  .isNotEmpty
-                                                              ? dropDownAgendaRecordList
-                                                                  .first
-                                                              : null;
-                                                      return FlutterFlowDropDown<
-                                                          String>(
-                                                        controller: _model
-                                                                .dropDownValueController ??=
-                                                            FormFieldController<
-                                                                String>(
-                                                          _model.dropDownValue ??=
-                                                              '',
-                                                        ),
-                                                        options: List<
-                                                                String>.from(
-                                                            dropDownAgendaRecord!
-                                                                .agendas),
-                                                        optionLabels:
-                                                            dropDownAgendaRecord!
-                                                                .agendas,
-                                                        onChanged: (val) =>
-                                                            setState(() => _model
-                                                                    .dropDownValue =
-                                                                val),
-                                                        width: 213.0,
-                                                        height: 43.0,
-                                                        textStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Colors
-                                                                      .white,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                ),
-                                                        hintText: 'Agenda item',
-                                                        icon: Icon(
-                                                          Icons
-                                                              .keyboard_arrow_down_rounded,
-                                                          color: Colors.white,
-                                                          size: 24.0,
-                                                        ),
-                                                        fillColor:
-                                                            Color(0xFF153172),
-                                                        elevation: 2.0,
-                                                        borderColor:
-                                                            Colors.black,
-                                                        borderWidth: 2.0,
-                                                        borderRadius: 8.0,
-                                                        margin:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    16.0,
-                                                                    4.0,
-                                                                    16.0,
-                                                                    4.0),
-                                                        hidesUnderline: true,
-                                                        isSearchable: false,
-                                                        isMultiSelect: false,
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, -1.0),
-                                                child: Text(
-                                                  'Team-leader\ngoal management',
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        color: Colors.white,
-                                                        fontSize: 30.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, -1.0),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 80.0, 0.0, 0.0),
-                                                  child: Text(
-                                                    'Only the team-leader can view this page.',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -1093,10 +1161,9 @@ class _MembersPreGoalsWidgetState extends State<MembersPreGoalsWidget> {
                                                         0.0, 5.0, 10.0, 0.0),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
-                                                    setState(() {
-                                                      FFAppState().InfoText =
-                                                          false;
-                                                    });
+                                                    FFAppState().InfoText =
+                                                        false;
+                                                    setState(() {});
                                                   },
                                                   text: 'Ok\n',
                                                   options: FFButtonOptions(

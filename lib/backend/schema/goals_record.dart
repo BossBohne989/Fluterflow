@@ -36,6 +36,11 @@ class GoalsRecord extends FirestoreRecord {
   String get teamIMG => _teamIMG ?? '';
   bool hasTeamIMG() => _teamIMG != null;
 
+  // "private" field.
+  bool? _private;
+  bool get private => _private ?? false;
+  bool hasPrivate() => _private != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -43,6 +48,7 @@ class GoalsRecord extends FirestoreRecord {
     _targetsToAgenda = snapshotData['TargetsToAgenda'] as String?;
     _team = snapshotData['Team'] as String?;
     _teamIMG = snapshotData['TeamIMG'] as String?;
+    _private = snapshotData['private'] as bool?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -88,6 +94,7 @@ Map<String, dynamic> createGoalsRecordData({
   String? targetsToAgenda,
   String? team,
   String? teamIMG,
+  bool? private,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -95,6 +102,7 @@ Map<String, dynamic> createGoalsRecordData({
       'TargetsToAgenda': targetsToAgenda,
       'Team': team,
       'TeamIMG': teamIMG,
+      'private': private,
     }.withoutNulls,
   );
 
@@ -109,12 +117,13 @@ class GoalsRecordDocumentEquality implements Equality<GoalsRecord> {
     return e1?.goal == e2?.goal &&
         e1?.targetsToAgenda == e2?.targetsToAgenda &&
         e1?.team == e2?.team &&
-        e1?.teamIMG == e2?.teamIMG;
+        e1?.teamIMG == e2?.teamIMG &&
+        e1?.private == e2?.private;
   }
 
   @override
   int hash(GoalsRecord? e) => const ListEquality()
-      .hash([e?.goal, e?.targetsToAgenda, e?.team, e?.teamIMG]);
+      .hash([e?.goal, e?.targetsToAgenda, e?.team, e?.teamIMG, e?.private]);
 
   @override
   bool isValidKey(Object? o) => o is GoalsRecord;

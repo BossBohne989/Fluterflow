@@ -80,301 +80,341 @@ class _GameRoomWidgetState extends State<GameRoomWidget> {
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: Color(0xFF153172),
-              body: Align(
-                alignment: AlignmentDirectional(0.0, 0.0),
-                child: StreamBuilder<List<UserRecord>>(
-                  stream: queryUserRecord(
-                    queryBuilder: (userRecord) => userRecord.where(
-                      'uid',
-                      isEqualTo: currentUserUid,
-                    ),
-                    singleRecord: true,
-                  ),
-                  builder: (context, snapshot) {
-                    // Customize what your widget looks like when it's loading.
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 50.0,
-                          height: 50.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
-                            ),
+              body: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: StreamBuilder<List<UserRecord>>(
+                        stream: queryUserRecord(
+                          queryBuilder: (userRecord) => userRecord.where(
+                            'uid',
+                            isEqualTo: currentUserUid,
                           ),
+                          singleRecord: true,
                         ),
-                      );
-                    }
-                    List<UserRecord> containerUserRecordList = snapshot.data!;
-                    final containerUserRecord =
-                        containerUserRecordList.isNotEmpty
-                            ? containerUserRecordList.first
-                            : null;
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF153172),
-                      ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 500.0, 0.0, 0.0),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  setState(() {
-                                    FFAppState().GameCode =
-                                        _model.txTTokenTextController.text;
-                                  });
-                                  if ((FFAppState().Email ==
-                                          'Lecture@Lecture.de') &&
-                                      (FFAppState().Password == 'Test1234')) {
-                                    context.pushNamed('Game_Settings');
-                                  } else {
-                                    if ((_model.txTTokenTextController.text ==
-                                            gameRoomRoomRecord?.joinCode) &&
-                                        (_model.txTTokenTextController.text !=
-                                            '')) {
-                                      if (containerUserRecord?.uid ==
-                                          currentUserUid) {
-                                        if (containerUserRecord?.team == '') {
-                                          context
-                                              .pushNamed('Country_Selection');
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          List<UserRecord> containerUserRecordList =
+                              snapshot.data!;
+                          final containerUserRecord =
+                              containerUserRecordList.isNotEmpty
+                                  ? containerUserRecordList.first
+                                  : null;
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF153172),
+                            ),
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 500.0, 0.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        FFAppState().GameCode =
+                                            _model.txTTokenTextController.text;
+                                        setState(() {});
+                                        if ((FFAppState().Email ==
+                                                'Lecture@Lecture.de') &&
+                                            (FFAppState().Password ==
+                                                'Test1234')) {
+                                          context.pushNamed('Game_Settings');
                                         } else {
-                                          if (containerUserRecord?.team ==
-                                              'WTO') {
-                                            if (gameRoomRoomRecord?.gameStart ==
-                                                true) {
-                                              if (gameRoomRoomRecord
-                                                      ?.finishAgendaCreate ==
-                                                  true) {
-                                                context.pushNamed('WTOHome');
-                                              } else {
+                                          if ((_model.txTTokenTextController
+                                                      .text ==
+                                                  gameRoomRoomRecord
+                                                      ?.joinCode) &&
+                                              (_model.txTTokenTextController
+                                                      .text !=
+                                                  '')) {
+                                            if (containerUserRecord?.uid ==
+                                                currentUserUid) {
+                                              if (containerUserRecord?.team ==
+                                                  '') {
                                                 context.pushNamed(
-                                                    'WTOCrePreAgenda');
+                                                    'Country_Selection');
+                                              } else {
+                                                if (containerUserRecord?.team ==
+                                                    'WTO') {
+                                                  if (gameRoomRoomRecord
+                                                          ?.gameStart ==
+                                                      true) {
+                                                    if (gameRoomRoomRecord
+                                                            ?.finishAgendaCreate ==
+                                                        true) {
+                                                      context
+                                                          .pushNamed('WTOHome');
+                                                    } else {
+                                                      context.pushNamed(
+                                                          'WTOCrePreAgenda');
+                                                    }
+                                                  } else {
+                                                    context
+                                                        .pushNamed('WTOLobby');
+                                                  }
+                                                } else {
+                                                  if (gameRoomRoomRecord
+                                                          ?.gameStart ==
+                                                      true) {
+                                                    if (gameRoomRoomRecord
+                                                            ?.agendaCreate ==
+                                                        true) {
+                                                      if (gameRoomRoomRecord
+                                                              ?.finishAgendaCreate ==
+                                                          true) {
+                                                        FFAppState()
+                                                            .MemberHome = true;
+                                                      } else {
+                                                        FFAppState()
+                                                                .MemberPreHome =
+                                                            true;
+                                                      }
+
+                                                      context.pushNamed(
+                                                          'MembersAllinOne');
+                                                    } else {
+                                                      FFAppState()
+                                                          .MemberPreHome = true;
+
+                                                      context.pushNamed(
+                                                          'MembersAllinOne');
+                                                    }
+                                                  } else {
+                                                    context.pushNamed(
+                                                        'MembersWaitingRoom');
+                                                  }
+                                                }
                                               }
                                             } else {
-                                              context.pushNamed('WTOLobby');
+                                              await UserRecord.createDoc(
+                                                      gameRoomRoomRecord!
+                                                          .reference)
+                                                  .set(createUserRecordData(
+                                                email: FFAppState().Email,
+                                                displayName:
+                                                    functions.createDisplayname(
+                                                        FFAppState().Email),
+                                                password: FFAppState().Password,
+                                                uid: currentUserUid,
+                                                gameCode: _model
+                                                    .txTTokenTextController
+                                                    .text,
+                                                createdTime:
+                                                    getCurrentTimestamp,
+                                                team: '',
+                                                teamIMG: '',
+                                              ));
+
+                                              context.pushNamed(
+                                                  'Country_Selection');
                                             }
                                           } else {
-                                            if (gameRoomRoomRecord?.gameStart ==
-                                                true) {
-                                              if (gameRoomRoomRecord
-                                                      ?.agendaCreate ==
-                                                  true) {
-                                                if (gameRoomRoomRecord
-                                                        ?.finishAgendaCreate ==
-                                                    true) {
-                                                  context
-                                                      .pushNamed('MembersHome');
-                                                }
-                                              } else {
-                                                context.pushNamed(
-                                                    'MembersPreAgenda');
-                                              }
-                                            } else {
-                                              context.pushNamed(
-                                                  'MembersWaitingRoom');
-                                            }
+                                            await showDialog(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  title: Text('Wrong code'),
+                                                  content: Text(
+                                                      'The code is not used'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext),
+                                                      child: Text('Ok'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
                                           }
                                         }
-                                      } else {
-                                        await UserRecord.createDoc(
-                                                gameRoomRoomRecord!.reference)
-                                            .set(createUserRecordData(
-                                          email: FFAppState().Email,
-                                          displayName:
-                                              functions.createDisplayname(
-                                                  FFAppState().Email),
-                                          password: FFAppState().Password,
-                                          uid: currentUserUid,
-                                          gameCode: _model
-                                              .txTTokenTextController.text,
-                                          createdTime: getCurrentTimestamp,
-                                          team: '',
-                                          teamIMG: '',
-                                        ));
-
-                                        context.pushNamed('Country_Selection');
-                                      }
-                                    } else {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return AlertDialog(
-                                            title: Text('Wrong code'),
-                                            content:
-                                                Text('The code is not used'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext),
-                                                child: Text('Ok'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  }
-                                },
-                                text: 'Join',
-                                options: FFButtonOptions(
-                                  width: 183.0,
-                                  height: 55.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24.0, 0.0, 24.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: Color(0xFF161616),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  elevation: 3.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  8.0, 350.0, 8.0, 0.0),
-                              child: Container(
-                                width: 200.0,
-                                child: TextFormField(
-                                  controller: _model.txTTokenTextController,
-                                  focusNode: _model.txTTokenFocusNode,
-                                  autofocus: true,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Session code here',
-                                    labelStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: Colors.white,
-                                          letterSpacing: 0.0,
+                                      },
+                                      text: 'Join',
+                                      options: FFButtonOptions(
+                                        width: 183.0,
+                                        height: 55.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            24.0, 0.0, 24.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: Color(0xFF161616),
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                            ),
+                                        elevation: 3.0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1.0,
                                         ),
-                                    hintStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: Colors.white,
-                                          letterSpacing: 0.0,
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8.0, 350.0, 8.0, 0.0),
+                                    child: Container(
+                                      width: 200.0,
+                                      child: TextFormField(
+                                        controller:
+                                            _model.txTTokenTextController,
+                                        focusNode: _model.txTTokenFocusNode,
+                                        autofocus: true,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Session code here',
+                                          labelStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Colors.white,
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Colors.white,
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          filled: true,
+                                          fillColor: Color(0xFF161616),
                                         ),
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    focusedErrorBorder: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Color(0xFF161616),
-                                  ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.normal,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                        validator: _model
+                                            .txTTokenTextControllerValidator
+                                            .asValidator(context),
                                       ),
-                                  validator: _model
-                                      .txTTokenTextControllerValidator
-                                      .asValidator(context),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 250.0, 0.0, 0.0),
-                              child: Text(
-                                'Please enter your session code\nto join a game session.',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
-                                      letterSpacing: 0.0,
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 250.0, 0.0, 0.0),
+                                    child: Text(
+                                      'Please enter your session code\nto join a game session.',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Colors.white,
+                                            letterSpacing: 0.0,
+                                          ),
                                     ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 150.0, 0.0, 0.0),
-                              child: Text(
-                                'Session Code',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
-                                      fontSize: 36.0,
-                                      letterSpacing: 0.0,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 150.0, 0.0, 0.0),
+                                    child: Text(
+                                      'Session Code',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Colors.white,
+                                            fontSize: 36.0,
+                                            letterSpacing: 0.0,
+                                          ),
                                     ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 600.0, 0.0, 0.0),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  GoRouter.of(context).prepareAuthEvent();
-                                  await authManager.signOut();
-                                  GoRouter.of(context).clearRedirectLocation();
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 600.0, 0.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        GoRouter.of(context).prepareAuthEvent();
+                                        await authManager.signOut();
+                                        GoRouter.of(context)
+                                            .clearRedirectLocation();
 
-                                  context.pushNamedAuth(
-                                      'Login', context.mounted);
-                                },
-                                text: 'Logout',
-                                options: FFButtonOptions(
-                                  width: 183.0,
-                                  height: 55.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24.0, 0.0, 24.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: Colors.white,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.black,
-                                        letterSpacing: 0.0,
+                                        context.pushNamedAuth(
+                                            'Login', context.mounted);
+                                      },
+                                      text: 'Logout',
+                                      options: FFButtonOptions(
+                                        width: 183.0,
+                                        height: 55.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            24.0, 0.0, 24.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: Colors.white,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Colors.black,
+                                              letterSpacing: 0.0,
+                                            ),
+                                        elevation: 3.0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
                                       ),
-                                  elevation: 3.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.circular(30.0),
                                 ),
-                              ),
+                              ],
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
             ),

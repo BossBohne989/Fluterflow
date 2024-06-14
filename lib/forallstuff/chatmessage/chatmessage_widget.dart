@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,8 +47,12 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<RoomRecord>>(
-      stream: queryRoomRecord(
+    return FutureBuilder<List<RoomRecord>>(
+      future: queryRoomRecordOnce(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -81,8 +86,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: Color(0xFF161616),
-              body: StreamBuilder<List<UserRecord>>(
-                stream: queryUserRecord(
+              body: FutureBuilder<List<UserRecord>>(
+                future: queryUserRecordOnce(
                   queryBuilder: (userRecord) => userRecord.where(
                     'uid',
                     isEqualTo: currentUserUid,
@@ -246,6 +251,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                       0.0),
                                                           child:
                                                               FlutterFlowIconButton(
+                                                            borderColor: Colors
+                                                                .transparent,
                                                             borderRadius: 20.0,
                                                             borderWidth: 1.0,
                                                             buttonSize: 60.0,
@@ -261,17 +268,15 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                               if (FFAppState()
                                                                       .chatinfo ==
                                                                   false) {
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .chatinfo =
-                                                                      true;
-                                                                });
+                                                                FFAppState()
+                                                                        .chatinfo =
+                                                                    true;
+                                                                setState(() {});
                                                               } else {
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .chatinfo =
-                                                                      false;
-                                                                });
+                                                                FFAppState()
+                                                                        .chatinfo =
+                                                                    false;
+                                                                setState(() {});
                                                               }
                                                             },
                                                           ),
@@ -297,7 +302,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                 stream:
                                                     queryOrganisationsChatRecord(
                                                   parent:
-                                                      FFAppState().activeChat,
+                                                      columnHasChatChatRecord
+                                                          .reference,
                                                   queryBuilder:
                                                       (organisationsChatRecord) =>
                                                           organisationsChatRecord
@@ -366,6 +372,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                             -1.0),
                                                                     child:
                                                                         Container(
+                                                                      width:
+                                                                          180.0,
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         color: Colors
@@ -412,16 +420,19 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                          Text(
+                                                                          AutoSizeText(
                                                                             listViewOrganisationsChatRecord.message,
+                                                                            maxLines:
+                                                                                5,
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Readex Pro',
                                                                                   color: Colors.black,
                                                                                   fontSize: 15.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.bold,
-                                                                                  lineHeight: 15.0,
                                                                                 ),
+                                                                            minFontSize:
+                                                                                5.0,
                                                                           ),
                                                                           Text(
                                                                             dateTimeFormat('Hm',
@@ -465,8 +476,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                             -1.0),
                                                                     child:
                                                                         Container(
-                                                                      height:
-                                                                          60.0,
+                                                                      width:
+                                                                          180.0,
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         color: Colors
@@ -492,7 +503,7 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                             alignment:
                                                                                 AlignmentDirectional(0.0, -1.0),
                                                                             child:
-                                                                                Text(
+                                                                                AutoSizeText(
                                                                               listViewOrganisationsChatRecord.message,
                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                     fontFamily: 'Readex Pro',
@@ -501,6 +512,7 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                                     letterSpacing: 0.0,
                                                                                     fontWeight: FontWeight.bold,
                                                                                   ),
+                                                                              minFontSize: 5.0,
                                                                             ),
                                                                           ),
                                                                           Align(
@@ -601,10 +613,7 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                         List<
                                                             OrganisationsChatRecord>>(
                                                       stream:
-                                                          queryOrganisationsChatRecord(
-                                                        parent: FFAppState()
-                                                            .activeChat,
-                                                      ),
+                                                          queryOrganisationsChatRecord(),
                                                       builder:
                                                           (context, snapshot) {
                                                         // Customize what your widget looks like when it's loading.
@@ -694,6 +703,8 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                             0.0),
                                                                         child:
                                                                             FlutterFlowIconButton(
+                                                                          borderColor:
+                                                                              Colors.transparent,
                                                                           borderRadius:
                                                                               20.0,
                                                                           borderWidth:
@@ -712,6 +723,11 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                                           ),
                                                                           onPressed:
                                                                               () async {
+                                                                            await listViewOrganisationsChatRecord.reference.update(createOrganisationsChatRecordData(
+                                                                              uid: functions.deleteUserID(listViewOrganisationsChatRecord.uid, currentUserUid),
+                                                                              user: functions.deleteUserID(listViewOrganisationsChatRecord.user, currentUserDisplayName),
+                                                                              team: functions.deleteUserID(listViewOrganisationsChatRecord.team, valueOrDefault(currentUserDocument?.team, '')),
+                                                                            ));
                                                                             await listViewOrganisationsChatRecord.reference.delete();
                                                                           },
                                                                         ),
@@ -740,7 +756,6 @@ class _ChatmessageWidgetState extends State<ChatmessageWidget> {
                                                 List<OrganisationsChatRecord>>(
                                               stream:
                                                   queryOrganisationsChatRecord(
-                                                parent: FFAppState().activeChat,
                                                 singleRecord: true,
                                               ),
                                               builder: (context, snapshot) {

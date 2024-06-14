@@ -31,12 +31,18 @@ class TalkRoomRecord extends FirestoreRecord {
   String get teamIMG => _teamIMG ?? '';
   bool hasTeamIMG() => _teamIMG != null;
 
+  // "ts" field.
+  DateTime? _ts;
+  DateTime? get ts => _ts;
+  bool hasTs() => _ts != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
     _teamname = snapshotData['Teamname'] as String?;
     _thema = snapshotData['Thema'] as String?;
     _teamIMG = snapshotData['TeamIMG'] as String?;
+    _ts = snapshotData['ts'] as DateTime?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -82,12 +88,14 @@ Map<String, dynamic> createTalkRoomRecordData({
   String? teamname,
   String? thema,
   String? teamIMG,
+  DateTime? ts,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'Teamname': teamname,
       'Thema': thema,
       'TeamIMG': teamIMG,
+      'ts': ts,
     }.withoutNulls,
   );
 
@@ -101,12 +109,13 @@ class TalkRoomRecordDocumentEquality implements Equality<TalkRoomRecord> {
   bool equals(TalkRoomRecord? e1, TalkRoomRecord? e2) {
     return e1?.teamname == e2?.teamname &&
         e1?.thema == e2?.thema &&
-        e1?.teamIMG == e2?.teamIMG;
+        e1?.teamIMG == e2?.teamIMG &&
+        e1?.ts == e2?.ts;
   }
 
   @override
   int hash(TalkRoomRecord? e) =>
-      const ListEquality().hash([e?.teamname, e?.thema, e?.teamIMG]);
+      const ListEquality().hash([e?.teamname, e?.thema, e?.teamIMG, e?.ts]);
 
   @override
   bool isValidKey(Object? o) => o is TalkRoomRecord;

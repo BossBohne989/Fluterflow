@@ -23,6 +23,7 @@ import 'schema/user_create_record.dart';
 import 'schema/package_02_record.dart';
 import 'schema/package_01_record.dart';
 import 'schema/package_03_record.dart';
+import 'schema/is_ready_player_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -49,6 +50,7 @@ export 'schema/user_create_record.dart';
 export 'schema/package_02_record.dart';
 export 'schema/package_01_record.dart';
 export 'schema/package_03_record.dart';
+export 'schema/is_ready_player_record.dart';
 
 /// Functions to query ChatRecords (as a Stream and as a Future).
 Future<int> queryChatRecordCount({
@@ -741,6 +743,46 @@ Future<List<Package03Record>> queryPackage03RecordOnce({
     queryCollectionOnce(
       Package03Record.collection,
       Package03Record.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query IsReadyPlayerRecords (as a Stream and as a Future).
+Future<int> queryIsReadyPlayerRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      IsReadyPlayerRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<IsReadyPlayerRecord>> queryIsReadyPlayerRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      IsReadyPlayerRecord.collection(parent),
+      IsReadyPlayerRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<IsReadyPlayerRecord>> queryIsReadyPlayerRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      IsReadyPlayerRecord.collection(parent),
+      IsReadyPlayerRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

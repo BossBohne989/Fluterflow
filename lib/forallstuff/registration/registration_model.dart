@@ -16,22 +16,22 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
   FocusNode? txTEmailFocusNode;
   TextEditingController? txTEmailTextController;
   String? Function(BuildContext, String?)? txTEmailTextControllerValidator;
-  // State field(s) for TxTPassword widget.
-  FocusNode? txTPasswordFocusNode;
-  TextEditingController? txTPasswordTextController;
-  late bool txTPasswordVisibility;
-  String? Function(BuildContext, String?)? txTPasswordTextControllerValidator;
   // State field(s) for TxTConfirmPassword widget.
   FocusNode? txTConfirmPasswordFocusNode;
   TextEditingController? txTConfirmPasswordTextController;
   late bool txTConfirmPasswordVisibility;
   String? Function(BuildContext, String?)?
       txTConfirmPasswordTextControllerValidator;
+  // State field(s) for TxTPassword widget.
+  FocusNode? txTPasswordFocusNode;
+  TextEditingController? txTPasswordTextController;
+  late bool txTPasswordVisibility;
+  String? Function(BuildContext, String?)? txTPasswordTextControllerValidator;
 
   @override
   void initState(BuildContext context) {
-    txTPasswordVisibility = false;
     txTConfirmPasswordVisibility = false;
+    txTPasswordVisibility = false;
   }
 
   @override
@@ -40,10 +40,10 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
     txTEmailFocusNode?.dispose();
     txTEmailTextController?.dispose();
 
-    txTPasswordFocusNode?.dispose();
-    txTPasswordTextController?.dispose();
-
     txTConfirmPasswordFocusNode?.dispose();
     txTConfirmPasswordTextController?.dispose();
+
+    txTPasswordFocusNode?.dispose();
+    txTPasswordTextController?.dispose();
   }
 }

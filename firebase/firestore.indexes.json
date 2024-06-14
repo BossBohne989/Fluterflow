@@ -37,26 +37,6 @@
       ]
     },
     {
-      "collectionGroup": "Goals",
-      "fieldPath": "TargetsToAgenda",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
       "collectionGroup": "countrie",
       "fieldPath": "country_Name",
       "indexes": [
@@ -227,36 +207,6 @@
       ]
     },
     {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
       "collectionGroup": "Goals",
       "fieldPath": "Team",
       "indexes": [
@@ -308,16 +258,6 @@
     },
     {
       "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
       "fieldPath": "Team_Leader",
       "indexes": [
         {
@@ -327,48 +267,8 @@
       ]
     },
     {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
       "collectionGroup": "Goals",
       "fieldPath": "TargetsToAgenda",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "Goals",
-      "fieldPath": "TargetsToAgenda",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
       "indexes": [
         {
           "order": "ASCENDING",
@@ -447,18 +347,8 @@
       ]
     },
     {
-      "collectionGroup": "User",
-      "fieldPath": "uid",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "User",
-      "fieldPath": "Team_Leader",
+      "collectionGroup": "Goals",
+      "fieldPath": "TargetsToAgenda",
       "indexes": [
         {
           "order": "ASCENDING",

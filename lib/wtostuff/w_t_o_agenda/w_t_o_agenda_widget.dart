@@ -295,9 +295,8 @@ class _WTOAgendaWidgetState extends State<WTOAgendaWidget> {
                                             0.0, 180.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            setState(() {
-                                              FFAppState().AddAgenda = true;
-                                            });
+                                            FFAppState().AddAgenda = true;
+                                            setState(() {});
                                           },
                                           text: 'New Agenda',
                                           options: FFButtonOptions(
@@ -635,10 +634,9 @@ class _WTOAgendaWidgetState extends State<WTOAgendaWidget> {
                                                       size: 24.0,
                                                     ),
                                                     onPressed: () async {
-                                                      setState(() {
-                                                        FFAppState().AddAgenda =
-                                                            false;
-                                                      });
+                                                      FFAppState().AddAgenda =
+                                                          false;
+                                                      setState(() {});
                                                     },
                                                   ),
                                                 ),

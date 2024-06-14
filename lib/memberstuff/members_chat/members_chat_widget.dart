@@ -5,10 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'members_chat_model.dart';
@@ -43,28 +40,16 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<RoomRecord>>(
       stream: queryRoomRecord(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
-      )..listen((snapshot) async {
-          List<RoomRecord> membersChatRoomRecordList = snapshot;
-          final membersChatRoomRecord = membersChatRoomRecordList.isNotEmpty
-              ? membersChatRoomRecordList.first
-              : null;
-          if (_model.membersChatPreviousSnapshot != null &&
-              !const ListEquality(RoomRecordDocumentEquality()).equals(
-                  membersChatRoomRecordList,
-                  _model.membersChatPreviousSnapshot)) {
-            _model.out = await RoomRecord.getDocumentOnce(
-                membersChatRoomRecord!.reference);
-            if (_model.out?.talkStart == true) {
-              context.pushNamed('MembersTalkRoom');
-            }
-
-            setState(() {});
-          }
-          _model.membersChatPreviousSnapshot = snapshot;
-        }),
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -114,19 +99,25 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
                             child: Stack(
                               children: [
                                 Align(
-                                  alignment: AlignmentDirectional(0.0, -1.0),
+                                  alignment: AlignmentDirectional(0.0, 1.0),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 60.0, 0.0, 0.0),
+                                        0.0, 0.0, 0.0, 15.0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
                                         if (membersChatRoomRecord
                                                 ?.finishAgendaCreate ==
                                             true) {
-                                          context.pushNamed('MembersHome');
+                                          FFAppState().MemberHome = true;
+                                          FFAppState().MemberPreHome = false;
+                                          setState(() {});
                                         } else {
-                                          context.pushNamed('MembersPreAgenda');
+                                          FFAppState().MemberHome = false;
+                                          FFAppState().MemberPreHome = true;
+                                          setState(() {});
                                         }
+
+                                        context.pushNamed('MembersAllinOne');
                                       },
                                       text: 'Back',
                                       options: FFButtonOptions(
@@ -156,10 +147,10 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
                                   ),
                                 ),
                                 Align(
-                                  alignment: AlignmentDirectional(1.0, 0.0),
+                                  alignment: AlignmentDirectional(1.0, 1.0),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 55.0, 50.0, 0.0),
+                                        0.0, 0.0, 50.0, 15.0),
                                     child: FlutterFlowIconButton(
                                       borderColor: Color(0xFF161616),
                                       borderRadius: 20.0,
@@ -267,11 +258,10 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
                                                 highlightColor:
                                                     Colors.transparent,
                                                 onTap: () async {
-                                                  setState(() {
-                                                    FFAppState().activeChat =
-                                                        containerChatRecord
-                                                            ?.reference;
-                                                  });
+                                                  FFAppState().activeChat =
+                                                      containerChatRecord
+                                                          ?.reference;
+                                                  setState(() {});
                                                   if (valueOrDefault(
                                                           currentUserDocument
                                                               ?.team,
@@ -313,7 +303,7 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
                                                         valueOrDefault<String>(
                                                           containerChatRecord
                                                               ?.lastMessage,
-                                                          'none',
+                                                          '-',
                                                         ).maybeHandleOverflow(
                                                             maxChars: 23),
                                                         style: FlutterFlowTheme
@@ -520,12 +510,11 @@ class _MembersChatWidgetState extends State<MembersChatWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .activeChat =
-                                                                listViewChatRecord
-                                                                    .reference;
-                                                          });
+                                                          FFAppState()
+                                                                  .activeChat =
+                                                              listViewChatRecord
+                                                                  .reference;
+                                                          setState(() {});
 
                                                           context.pushNamed(
                                                               'Chatmessage');

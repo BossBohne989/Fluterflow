@@ -71,6 +71,11 @@ class UserRecord extends FirestoreRecord {
   String get gameCode => _gameCode ?? '';
   bool hasGameCode() => _gameCode != null;
 
+  // "isReady" field.
+  bool? _isReady;
+  bool get isReady => _isReady ?? false;
+  bool hasIsReady() => _isReady != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -85,6 +90,7 @@ class UserRecord extends FirestoreRecord {
     _phoneNumber = snapshotData['phone_number'] as String?;
     _teamLeader = snapshotData['Team_Leader'] as bool?;
     _gameCode = snapshotData['GameCode'] as String?;
+    _isReady = snapshotData['isReady'] as bool?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -137,6 +143,7 @@ Map<String, dynamic> createUserRecordData({
   String? phoneNumber,
   bool? teamLeader,
   String? gameCode,
+  bool? isReady,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -151,6 +158,7 @@ Map<String, dynamic> createUserRecordData({
       'phone_number': phoneNumber,
       'Team_Leader': teamLeader,
       'GameCode': gameCode,
+      'isReady': isReady,
     }.withoutNulls,
   );
 
@@ -172,7 +180,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e1?.photoUrl == e2?.photoUrl &&
         e1?.phoneNumber == e2?.phoneNumber &&
         e1?.teamLeader == e2?.teamLeader &&
-        e1?.gameCode == e2?.gameCode;
+        e1?.gameCode == e2?.gameCode &&
+        e1?.isReady == e2?.isReady;
   }
 
   @override
@@ -187,7 +196,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e?.photoUrl,
         e?.phoneNumber,
         e?.teamLeader,
-        e?.gameCode
+        e?.gameCode,
+        e?.isReady
       ]);
 
   @override

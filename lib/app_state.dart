@@ -44,6 +44,21 @@ class FFAppState extends ChangeNotifier {
           await secureStorage.getBool('ff_MemberAbkommenInfo') ??
               _MemberAbkommenInfo;
     });
+    await _safeInitAsync(() async {
+      _MemberTalkRoom =
+          await secureStorage.getBool('ff_MemberTalkRoom') ?? _MemberTalkRoom;
+    });
+    await _safeInitAsync(() async {
+      _MemberPreHome =
+          await secureStorage.getBool('ff_MemberPreHome') ?? _MemberPreHome;
+    });
+    await _safeInitAsync(() async {
+      _MemberPreGoals =
+          await secureStorage.getBool('ff_MemberPreGoals') ?? _MemberPreGoals;
+    });
+    await _safeInitAsync(() async {
+      _isReady = await secureStorage.getString('ff_isReady') ?? _isReady;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -55,10 +70,10 @@ class FFAppState extends ChangeNotifier {
 
   DocumentReference? _activeChat;
   DocumentReference? get activeChat => _activeChat;
-  set activeChat(DocumentReference? _value) {
-    _activeChat = _value;
-    _value != null
-        ? secureStorage.setString('ff_activeChat', _value.path)
+  set activeChat(DocumentReference? value) {
+    _activeChat = value;
+    value != null
+        ? secureStorage.setString('ff_activeChat', value.path)
         : secureStorage.remove('ff_activeChat');
   }
 
@@ -68,294 +83,294 @@ class FFAppState extends ChangeNotifier {
 
   String _team = '';
   String get team => _team;
-  set team(String _value) {
-    _team = _value;
+  set team(String value) {
+    _team = value;
   }
 
   String _teamImg = '';
   String get teamImg => _teamImg;
-  set teamImg(String _value) {
-    _teamImg = _value;
+  set teamImg(String value) {
+    _teamImg = value;
   }
 
   bool _searchMode = false;
   bool get searchMode => _searchMode;
-  set searchMode(bool _value) {
-    _searchMode = _value;
+  set searchMode(bool value) {
+    _searchMode = value;
   }
 
   String _searchTeam = '';
   String get searchTeam => _searchTeam;
-  set searchTeam(String _value) {
-    _searchTeam = _value;
+  set searchTeam(String value) {
+    _searchTeam = value;
   }
 
   String _Teamname = '';
   String get Teamname => _Teamname;
-  set Teamname(String _value) {
-    _Teamname = _value;
+  set Teamname(String value) {
+    _Teamname = value;
   }
 
   String _WhichRoomJoin = '';
   String get WhichRoomJoin => _WhichRoomJoin;
-  set WhichRoomJoin(String _value) {
-    _WhichRoomJoin = _value;
+  set WhichRoomJoin(String value) {
+    _WhichRoomJoin = value;
   }
 
   String _TalkCountrie = '';
   String get TalkCountrie => _TalkCountrie;
-  set TalkCountrie(String _value) {
-    _TalkCountrie = _value;
+  set TalkCountrie(String value) {
+    _TalkCountrie = value;
   }
 
   bool _GameStart = false;
   bool get GameStart => _GameStart;
-  set GameStart(bool _value) {
-    _GameStart = _value;
+  set GameStart(bool value) {
+    _GameStart = value;
   }
 
   bool _RoundRdy = false;
   bool get RoundRdy => _RoundRdy;
-  set RoundRdy(bool _value) {
-    _RoundRdy = _value;
+  set RoundRdy(bool value) {
+    _RoundRdy = value;
   }
 
   String _TeamSpeech = '';
   String get TeamSpeech => _TeamSpeech;
-  set TeamSpeech(String _value) {
-    _TeamSpeech = _value;
+  set TeamSpeech(String value) {
+    _TeamSpeech = value;
   }
 
   List<String> _checkboxtrue = [];
   List<String> get checkboxtrue => _checkboxtrue;
-  set checkboxtrue(List<String> _value) {
-    _checkboxtrue = _value;
+  set checkboxtrue(List<String> value) {
+    _checkboxtrue = value;
   }
 
-  void addToCheckboxtrue(String _value) {
-    _checkboxtrue.add(_value);
+  void addToCheckboxtrue(String value) {
+    checkboxtrue.add(value);
   }
 
-  void removeFromCheckboxtrue(String _value) {
-    _checkboxtrue.remove(_value);
+  void removeFromCheckboxtrue(String value) {
+    checkboxtrue.remove(value);
   }
 
-  void removeAtIndexFromCheckboxtrue(int _index) {
-    _checkboxtrue.removeAt(_index);
+  void removeAtIndexFromCheckboxtrue(int index) {
+    checkboxtrue.removeAt(index);
   }
 
   void updateCheckboxtrueAtIndex(
-    int _index,
+    int index,
     String Function(String) updateFn,
   ) {
-    _checkboxtrue[_index] = updateFn(_checkboxtrue[_index]);
+    checkboxtrue[index] = updateFn(_checkboxtrue[index]);
   }
 
-  void insertAtIndexInCheckboxtrue(int _index, String _value) {
-    _checkboxtrue.insert(_index, _value);
+  void insertAtIndexInCheckboxtrue(int index, String value) {
+    checkboxtrue.insert(index, value);
   }
 
   List<String> _checkboxteam = [];
   List<String> get checkboxteam => _checkboxteam;
-  set checkboxteam(List<String> _value) {
-    _checkboxteam = _value;
+  set checkboxteam(List<String> value) {
+    _checkboxteam = value;
   }
 
-  void addToCheckboxteam(String _value) {
-    _checkboxteam.add(_value);
+  void addToCheckboxteam(String value) {
+    checkboxteam.add(value);
   }
 
-  void removeFromCheckboxteam(String _value) {
-    _checkboxteam.remove(_value);
+  void removeFromCheckboxteam(String value) {
+    checkboxteam.remove(value);
   }
 
-  void removeAtIndexFromCheckboxteam(int _index) {
-    _checkboxteam.removeAt(_index);
+  void removeAtIndexFromCheckboxteam(int index) {
+    checkboxteam.removeAt(index);
   }
 
   void updateCheckboxteamAtIndex(
-    int _index,
+    int index,
     String Function(String) updateFn,
   ) {
-    _checkboxteam[_index] = updateFn(_checkboxteam[_index]);
+    checkboxteam[index] = updateFn(_checkboxteam[index]);
   }
 
-  void insertAtIndexInCheckboxteam(int _index, String _value) {
-    _checkboxteam.insert(_index, _value);
+  void insertAtIndexInCheckboxteam(int index, String value) {
+    checkboxteam.insert(index, value);
   }
 
   List<String> _checkboxDisplayname = [];
   List<String> get checkboxDisplayname => _checkboxDisplayname;
-  set checkboxDisplayname(List<String> _value) {
-    _checkboxDisplayname = _value;
+  set checkboxDisplayname(List<String> value) {
+    _checkboxDisplayname = value;
   }
 
-  void addToCheckboxDisplayname(String _value) {
-    _checkboxDisplayname.add(_value);
+  void addToCheckboxDisplayname(String value) {
+    checkboxDisplayname.add(value);
   }
 
-  void removeFromCheckboxDisplayname(String _value) {
-    _checkboxDisplayname.remove(_value);
+  void removeFromCheckboxDisplayname(String value) {
+    checkboxDisplayname.remove(value);
   }
 
-  void removeAtIndexFromCheckboxDisplayname(int _index) {
-    _checkboxDisplayname.removeAt(_index);
+  void removeAtIndexFromCheckboxDisplayname(int index) {
+    checkboxDisplayname.removeAt(index);
   }
 
   void updateCheckboxDisplaynameAtIndex(
-    int _index,
+    int index,
     String Function(String) updateFn,
   ) {
-    _checkboxDisplayname[_index] = updateFn(_checkboxDisplayname[_index]);
+    checkboxDisplayname[index] = updateFn(_checkboxDisplayname[index]);
   }
 
-  void insertAtIndexInCheckboxDisplayname(int _index, String _value) {
-    _checkboxDisplayname.insert(_index, _value);
+  void insertAtIndexInCheckboxDisplayname(int index, String value) {
+    checkboxDisplayname.insert(index, value);
   }
 
   bool _checkBoxPublic = false;
   bool get checkBoxPublic => _checkBoxPublic;
-  set checkBoxPublic(bool _value) {
-    _checkBoxPublic = _value;
+  set checkBoxPublic(bool value) {
+    _checkBoxPublic = value;
   }
 
   bool _checkBoxPrivate = false;
   bool get checkBoxPrivate => _checkBoxPrivate;
-  set checkBoxPrivate(bool _value) {
-    _checkBoxPrivate = _value;
+  set checkBoxPrivate(bool value) {
+    _checkBoxPrivate = value;
   }
 
   bool _AddAgenda = false;
   bool get AddAgenda => _AddAgenda;
-  set AddAgenda(bool _value) {
-    _AddAgenda = _value;
+  set AddAgenda(bool value) {
+    _AddAgenda = value;
   }
 
   DocumentReference? _activeGroupchat;
   DocumentReference? get activeGroupchat => _activeGroupchat;
-  set activeGroupchat(DocumentReference? _value) {
-    _activeGroupchat = _value;
+  set activeGroupchat(DocumentReference? value) {
+    _activeGroupchat = value;
   }
 
   bool _UserLeader = false;
   bool get UserLeader => _UserLeader;
-  set UserLeader(bool _value) {
-    _UserLeader = _value;
+  set UserLeader(bool value) {
+    _UserLeader = value;
   }
 
   String _whichTheme = '';
   String get whichTheme => _whichTheme;
-  set whichTheme(String _value) {
-    _whichTheme = _value;
+  set whichTheme(String value) {
+    _whichTheme = value;
   }
 
   DocumentReference? _activAgreement;
   DocumentReference? get activAgreement => _activAgreement;
-  set activAgreement(DocumentReference? _value) {
-    _activAgreement = _value;
+  set activAgreement(DocumentReference? value) {
+    _activAgreement = value;
   }
 
   String _TalkTeam = '';
   String get TalkTeam => _TalkTeam;
-  set TalkTeam(String _value) {
-    _TalkTeam = _value;
+  set TalkTeam(String value) {
+    _TalkTeam = value;
   }
 
   String _TalkTeamname = '';
   String get TalkTeamname => _TalkTeamname;
-  set TalkTeamname(String _value) {
-    _TalkTeamname = _value;
+  set TalkTeamname(String value) {
+    _TalkTeamname = value;
   }
 
   bool _agreement = true;
   bool get agreement => _agreement;
-  set agreement(bool _value) {
-    _agreement = _value;
+  set agreement(bool value) {
+    _agreement = value;
   }
 
   bool _LeaveTeam = false;
   bool get LeaveTeam => _LeaveTeam;
-  set LeaveTeam(bool _value) {
-    _LeaveTeam = _value;
+  set LeaveTeam(bool value) {
+    _LeaveTeam = value;
   }
 
   bool _Communique = false;
   bool get Communique => _Communique;
-  set Communique(bool _value) {
-    _Communique = _value;
+  set Communique(bool value) {
+    _Communique = value;
   }
 
   bool _checkagreement = false;
   bool get checkagreement => _checkagreement;
-  set checkagreement(bool _value) {
-    _checkagreement = _value;
+  set checkagreement(bool value) {
+    _checkagreement = value;
   }
 
   bool _Agreementused = false;
   bool get Agreementused => _Agreementused;
-  set Agreementused(bool _value) {
-    _Agreementused = _value;
+  set Agreementused(bool value) {
+    _Agreementused = value;
   }
 
   String _Email = '';
   String get Email => _Email;
-  set Email(String _value) {
-    _Email = _value;
+  set Email(String value) {
+    _Email = value;
   }
 
   String _Name = '';
   String get Name => _Name;
-  set Name(String _value) {
-    _Name = _value;
+  set Name(String value) {
+    _Name = value;
   }
 
   String _Password = '';
   String get Password => _Password;
-  set Password(String _value) {
-    _Password = _value;
+  set Password(String value) {
+    _Password = value;
   }
 
   String _UID = '';
   String get UID => _UID;
-  set UID(String _value) {
-    _UID = _value;
+  set UID(String value) {
+    _UID = value;
   }
 
   bool _CreatedGameInfo = false;
   bool get CreatedGameInfo => _CreatedGameInfo;
-  set CreatedGameInfo(bool _value) {
-    _CreatedGameInfo = _value;
+  set CreatedGameInfo(bool value) {
+    _CreatedGameInfo = value;
   }
 
   bool _Generalgoals = false;
   bool get Generalgoals => _Generalgoals;
-  set Generalgoals(bool _value) {
-    _Generalgoals = _value;
+  set Generalgoals(bool value) {
+    _Generalgoals = value;
   }
 
   bool _InfoText = false;
   bool get InfoText => _InfoText;
-  set InfoText(bool _value) {
-    _InfoText = _value;
+  set InfoText(bool value) {
+    _InfoText = value;
   }
 
   bool _EndGame = false;
   bool get EndGame => _EndGame;
-  set EndGame(bool _value) {
-    _EndGame = _value;
+  set EndGame(bool value) {
+    _EndGame = value;
   }
 
   bool _chatinfo = false;
   bool get chatinfo => _chatinfo;
-  set chatinfo(bool _value) {
-    _chatinfo = _value;
+  set chatinfo(bool value) {
+    _chatinfo = value;
   }
 
   String _GameCode = '';
   String get GameCode => _GameCode;
-  set GameCode(String _value) {
-    _GameCode = _value;
-    secureStorage.setString('ff_GameCode', _value);
+  set GameCode(String value) {
+    _GameCode = value;
+    secureStorage.setString('ff_GameCode', value);
   }
 
   void deleteGameCode() {
@@ -364,9 +379,9 @@ class FFAppState extends ChangeNotifier {
 
   bool _MemberHome = false;
   bool get MemberHome => _MemberHome;
-  set MemberHome(bool _value) {
-    _MemberHome = _value;
-    secureStorage.setBool('ff_MemberHome', _value);
+  set MemberHome(bool value) {
+    _MemberHome = value;
+    secureStorage.setBool('ff_MemberHome', value);
   }
 
   void deleteMemberHome() {
@@ -375,9 +390,9 @@ class FFAppState extends ChangeNotifier {
 
   bool _MemberAbkommen = false;
   bool get MemberAbkommen => _MemberAbkommen;
-  set MemberAbkommen(bool _value) {
-    _MemberAbkommen = _value;
-    secureStorage.setBool('ff_MemberAbkommen', _value);
+  set MemberAbkommen(bool value) {
+    _MemberAbkommen = value;
+    secureStorage.setBool('ff_MemberAbkommen', value);
   }
 
   void deleteMemberAbkommen() {
@@ -386,9 +401,9 @@ class FFAppState extends ChangeNotifier {
 
   bool _MemberAbkommenCreate = false;
   bool get MemberAbkommenCreate => _MemberAbkommenCreate;
-  set MemberAbkommenCreate(bool _value) {
-    _MemberAbkommenCreate = _value;
-    secureStorage.setBool('ff_MemberAbkommenCreate', _value);
+  set MemberAbkommenCreate(bool value) {
+    _MemberAbkommenCreate = value;
+    secureStorage.setBool('ff_MemberAbkommenCreate', value);
   }
 
   void deleteMemberAbkommenCreate() {
@@ -397,13 +412,57 @@ class FFAppState extends ChangeNotifier {
 
   bool _MemberAbkommenInfo = false;
   bool get MemberAbkommenInfo => _MemberAbkommenInfo;
-  set MemberAbkommenInfo(bool _value) {
-    _MemberAbkommenInfo = _value;
-    secureStorage.setBool('ff_MemberAbkommenInfo', _value);
+  set MemberAbkommenInfo(bool value) {
+    _MemberAbkommenInfo = value;
+    secureStorage.setBool('ff_MemberAbkommenInfo', value);
   }
 
   void deleteMemberAbkommenInfo() {
     secureStorage.delete(key: 'ff_MemberAbkommenInfo');
+  }
+
+  bool _MemberTalkRoom = false;
+  bool get MemberTalkRoom => _MemberTalkRoom;
+  set MemberTalkRoom(bool value) {
+    _MemberTalkRoom = value;
+    secureStorage.setBool('ff_MemberTalkRoom', value);
+  }
+
+  void deleteMemberTalkRoom() {
+    secureStorage.delete(key: 'ff_MemberTalkRoom');
+  }
+
+  bool _MemberPreHome = false;
+  bool get MemberPreHome => _MemberPreHome;
+  set MemberPreHome(bool value) {
+    _MemberPreHome = value;
+    secureStorage.setBool('ff_MemberPreHome', value);
+  }
+
+  void deleteMemberPreHome() {
+    secureStorage.delete(key: 'ff_MemberPreHome');
+  }
+
+  bool _MemberPreGoals = false;
+  bool get MemberPreGoals => _MemberPreGoals;
+  set MemberPreGoals(bool value) {
+    _MemberPreGoals = value;
+    secureStorage.setBool('ff_MemberPreGoals', value);
+  }
+
+  void deleteMemberPreGoals() {
+    secureStorage.delete(key: 'ff_MemberPreGoals');
+  }
+
+  String _isReady = '';
+  String get isReady => _isReady;
+  set isReady(String value) {
+    _isReady = value;
+    secureStorage.setString('ff_isReady', value);
+  }
+
+  void deleteIsReady() {
+    secureStorage.delete(key: 'ff_isReady');
   }
 }
 

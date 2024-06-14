@@ -3,8 +3,6 @@ export '/forallstuff/login/login_widget.dart' show LoginWidget;
 export '/forallstuff/game_room/game_room_widget.dart' show GameRoomWidget;
 export '/forallstuff/registration/registration_widget.dart'
     show RegistrationWidget;
-export '/memberstuff/members_home/members_home_widget.dart'
-    show MembersHomeWidget;
 export '/memberstuff/members_profil/members_profil_widget.dart'
     show MembersProfilWidget;
 export '/game_creator/game_create_room/game_create_room_widget.dart'
@@ -22,8 +20,6 @@ export '/memberstuff/members_waiting_room/members_waiting_room_widget.dart'
     show MembersWaitingRoomWidget;
 export '/forallstuff/create_group_chat_page/create_group_chat_page_widget.dart'
     show CreateGroupChatPageWidget;
-export '/memberstuff/members_talk_room/members_talk_room_widget.dart'
-    show MembersTalkRoomWidget;
 export '/memberstuff/members_chat/members_chat_widget.dart'
     show MembersChatWidget;
 export '/forallstuff/chatmessage/chatmessage_widget.dart'
@@ -40,8 +36,6 @@ export '/forallstuff/groupe_chat_mes/groupe_chat_mes_widget.dart'
     show GroupeChatMesWidget;
 export '/wtostuff/w_t_o_information_page/w_t_o_information_page_widget.dart'
     show WTOInformationPageWidget;
-export '/memberstuff/members_abkommen/members_abkommen_widget.dart'
-    show MembersAbkommenWidget;
 export '/memberstuff/members_abkommeninfo/members_abkommeninfo_widget.dart'
     show MembersAbkommeninfoWidget;
 export '/memberstuff/members_abkommen_create/members_abkommen_create_widget.dart'
@@ -57,8 +51,6 @@ export '/memberstuff/members_phases/phase4/phase4_widget.dart'
     show Phase4Widget;
 export '/memberstuff/members_phases/phase5/phase5_widget.dart'
     show Phase5Widget;
-export '/memberstuff/members_pre_agenda/members_pre_agenda_widget.dart'
-    show MembersPreAgendaWidget;
 export '/wtostuff/w_t_o_pre_agenda/w_t_o_pre_agenda_widget.dart'
     show WTOPreAgendaWidget;
 export '/wtostuff/w_t_o_cre_pre_agenda/w_t_o_cre_pre_agenda_widget.dart'
@@ -81,8 +73,8 @@ export '/lecturer/game_settings_game_code/game_settings_game_code_widget.dart'
     show GameSettingsGameCodeWidget;
 export '/wtostuff/w_t_o_pre_talk_room/w_t_o_pre_talk_room_widget.dart'
     show WTOPreTalkRoomWidget;
-export '/memberstuff/members_pre_talk_room/members_pre_talk_room_widget.dart'
-    show MembersPreTalkRoomWidget;
+export '/memberstuff/members_talk_room/members_talk_room_widget.dart'
+    show MembersTalkRoomWidget;
 export '/lecturer/game_settings_selection/game_settings_selection_widget.dart'
     show GameSettingsSelectionWidget;
 export '/lecturer/game_settings_packages/game_settings_packages_widget.dart'
@@ -94,7 +86,5 @@ export '/lecturer/game_settings_packages_02/game_settings_packages02_widget.dart
 export '/lecturer/game_settings_packages_03/game_settings_packages03_widget.dart'
     show GameSettingsPackages03Widget;
 export '/forallstuff/sponsor/sponsor_widget.dart' show SponsorWidget;
-export '/memberstuff/members_goals/members_goals_widget.dart'
-    show MembersGoalsWidget;
 export '/memberstuff/members_allin_one/members_allin_one_widget.dart'
     show MembersAllinOneWidget;

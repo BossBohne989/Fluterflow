@@ -17,7 +17,6 @@ class GameSettingsTeamLeaderModel
 
   final unfocusNode = FocusNode();
   // State field(s) for Checkbox widget.
-
   Map<UserRecord, bool> checkboxValueMap = {};
   List<UserRecord> get checkboxCheckedItems =>
       checkboxValueMap.entries.where((e) => e.value).map((e) => e.key).toList();

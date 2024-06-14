@@ -12,28 +12,28 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TXTEmail widget.
-  FocusNode? tXTEmailFocusNode;
-  TextEditingController? tXTEmailTextController;
-  String? Function(BuildContext, String?)? tXTEmailTextControllerValidator;
-  // State field(s) for TXTPassword widget.
-  FocusNode? tXTPasswordFocusNode;
-  TextEditingController? tXTPasswordTextController;
-  late bool tXTPasswordVisibility;
-  String? Function(BuildContext, String?)? tXTPasswordTextControllerValidator;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode1;
+  TextEditingController? emailTextController;
+  String? Function(BuildContext, String?)? emailTextControllerValidator;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode2;
+  TextEditingController? passwordTextController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordTextControllerValidator;
 
   @override
   void initState(BuildContext context) {
-    tXTPasswordVisibility = false;
+    passwordVisibility = false;
   }
 
   @override
   void dispose() {
     unfocusNode.dispose();
-    tXTEmailFocusNode?.dispose();
-    tXTEmailTextController?.dispose();
+    textFieldFocusNode1?.dispose();
+    emailTextController?.dispose();
 
-    tXTPasswordFocusNode?.dispose();
-    tXTPasswordTextController?.dispose();
+    textFieldFocusNode2?.dispose();
+    passwordTextController?.dispose();
   }
 }

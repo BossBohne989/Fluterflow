@@ -234,6 +234,10 @@ class _GameCreateRoomWidgetState extends State<GameCreateRoomWidget> {
                                             true,
                                             true,
                                           );
+                                          _model.textController?.selection =
+                                              TextSelection.collapsed(
+                                                  offset: _model.textController!
+                                                      .text.length);
                                         });
                                       },
                                       text: 'Generate Code',
@@ -365,10 +369,9 @@ class _GameCreateRoomWidgetState extends State<GameCreateRoomWidget> {
                                                         agendacount: 0,
                                                       ),
                                                       roomRecordReference);
-                                              setState(() {
-                                                FFAppState().CreatedGameInfo =
-                                                    true;
-                                              });
+                                              FFAppState().CreatedGameInfo =
+                                                  true;
+                                              setState(() {});
 
                                               await GoalsRecord.createDoc(
                                                       _model.roomref!.reference)
@@ -645,11 +648,10 @@ class _GameCreateRoomWidgetState extends State<GameCreateRoomWidget> {
                                                     size: 24.0,
                                                   ),
                                                   onPressed: () async {
-                                                    setState(() {
-                                                      FFAppState()
-                                                              .CreatedGameInfo =
-                                                          false;
-                                                    });
+                                                    FFAppState()
+                                                            .CreatedGameInfo =
+                                                        false;
+                                                    setState(() {});
                                                   },
                                                 ),
                                               ),

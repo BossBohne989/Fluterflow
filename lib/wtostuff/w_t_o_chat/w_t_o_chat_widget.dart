@@ -124,7 +124,13 @@ class _WTOChatWidgetState extends State<WTOChatWidget> {
                                             AlignmentDirectional(0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            context.pushNamed('WTOHome');
+                                            if (containerRoomRecord!
+                                                .finishAgendaCreate) {
+                                              context.pushNamed('WTOHome');
+                                            } else {
+                                              context
+                                                  .pushNamed('WTOCrePreAgenda');
+                                            }
                                           },
                                           text: 'Home',
                                           options: FFButtonOptions(
@@ -341,12 +347,10 @@ class _WTOChatWidgetState extends State<WTOChatWidget> {
                                                     highlightColor:
                                                         Colors.transparent,
                                                     onTap: () async {
-                                                      setState(() {
-                                                        FFAppState()
-                                                                .activeChat =
-                                                            containerChatRecord
-                                                                ?.reference;
-                                                      });
+                                                      FFAppState().activeChat =
+                                                          containerChatRecord
+                                                              ?.reference;
+                                                      setState(() {});
                                                       if (containerUserRecord
                                                               ?.team ==
                                                           'WTO') {
@@ -577,11 +581,10 @@ class _WTOChatWidgetState extends State<WTOChatWidget> {
                                                   highlightColor:
                                                       Colors.transparent,
                                                   onTap: () async {
-                                                    setState(() {
-                                                      FFAppState().activeChat =
-                                                          containerChatRecord
-                                                              ?.reference;
-                                                    });
+                                                    FFAppState().activeChat =
+                                                        containerChatRecord
+                                                            ?.reference;
+                                                    setState(() {});
 
                                                     context.pushNamed(
                                                         'Chatmessage');
@@ -816,12 +819,11 @@ class _WTOChatWidgetState extends State<WTOChatWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .activeChat =
-                                                                listViewChatRecord
-                                                                    .reference;
-                                                          });
+                                                          FFAppState()
+                                                                  .activeChat =
+                                                              listViewChatRecord
+                                                                  .reference;
+                                                          setState(() {});
 
                                                           context.pushNamed(
                                                               'Chatmessage');

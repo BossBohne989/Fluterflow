@@ -97,10 +97,9 @@ class _GameSettingsGameCodeWidgetState
                   alignment: AlignmentDirectional(0.0, 0.07),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      setState(() {
-                        FFAppState().GameCode =
-                            _model.txTTokenTextController.text;
-                      });
+                      FFAppState().GameCode =
+                          _model.txTTokenTextController.text;
+                      setState(() {});
 
                       context.pushNamed('Game_Settings');
                     },

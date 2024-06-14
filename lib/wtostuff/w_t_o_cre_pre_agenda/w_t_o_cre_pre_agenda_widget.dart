@@ -329,10 +329,8 @@ class _WTOCrePreAgendaWidgetState extends State<WTOCrePreAgendaWidget> {
                                                       0.0, 0.0, 0.0, 150.0),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  setState(() {
-                                                    FFAppState().AddAgenda =
-                                                        true;
-                                                  });
+                                                  FFAppState().AddAgenda = true;
+                                                  setState(() {});
                                                 },
                                                 text: 'New Agenda',
                                                 options: FFButtonOptions(
@@ -668,7 +666,7 @@ class _WTOCrePreAgendaWidgetState extends State<WTOCrePreAgendaWidget> {
                           alignment: AlignmentDirectional(0.0, 1.0),
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 50.0),
+                                0.0, 0.0, 250.0, 50.0),
                             child: StreamBuilder<List<RoomRecord>>(
                               stream: queryRoomRecord(
                                 singleRecord: true,
@@ -874,6 +872,41 @@ class _WTOCrePreAgendaWidgetState extends State<WTOCrePreAgendaWidget> {
                                     ),
                                   ),
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional(0.0, 1.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                250.0, 0.0, 0.0, 50.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                context.pushNamed('WTOChat');
+                              },
+                              text: 'Chat',
+                              options: FFButtonOptions(
+                                width: 200.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Color(0xFF157251),
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
                             ),
                           ),

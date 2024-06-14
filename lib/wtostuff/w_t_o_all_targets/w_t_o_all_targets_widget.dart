@@ -381,9 +381,8 @@ class _WTOAllTargetsWidgetState extends State<WTOAllTargetsWidget> {
                               250.0, 30.0, 0.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              setState(() {
-                                FFAppState().agreement = false;
-                              });
+                              FFAppState().agreement = false;
+                              setState(() {});
                             },
                             text: 'Agenda',
                             options: FFButtonOptions(
@@ -617,9 +616,8 @@ class _WTOAllTargetsWidgetState extends State<WTOAllTargetsWidget> {
                               250.0, 30.0, 0.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              setState(() {
-                                FFAppState().agreement = true;
-                              });
+                              FFAppState().agreement = true;
+                              setState(() {});
                             },
                             text: 'Agreement',
                             options: FFButtonOptions(

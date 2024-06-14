@@ -239,10 +239,9 @@ class _GameSettingsTeamSelectionWidgetState
                                             AlignmentDirectional(0.93, -0.02),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            setState(() {
-                                              FFAppState().Teamname =
-                                                  FFAppState().team;
-                                            });
+                                            FFAppState().Teamname =
+                                                FFAppState().team;
+                                            setState(() {});
 
                                             context.pushNamed(
                                                 'Game_Settings_Selection');

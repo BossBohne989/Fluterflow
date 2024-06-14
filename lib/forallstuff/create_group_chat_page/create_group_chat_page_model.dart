@@ -16,7 +16,6 @@ class CreateGroupChatPageModel
 
   final unfocusNode = FocusNode();
   // State field(s) for Checkbox widget.
-
   Map<UserRecord, bool> checkboxValueMap1 = {};
   List<UserRecord> get checkboxCheckedItems1 => checkboxValueMap1.entries
       .where((e) => e.value)

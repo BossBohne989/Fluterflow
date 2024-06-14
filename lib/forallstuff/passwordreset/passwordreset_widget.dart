@@ -41,8 +41,8 @@ class _PasswordresetWidgetState extends State<PasswordresetWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<UserCreateRecord>>(
-      stream: queryUserCreateRecord(
+    return FutureBuilder<List<UserCreateRecord>>(
+      future: queryUserCreateRecordOnce(
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -78,14 +78,14 @@ class _PasswordresetWidgetState extends State<PasswordresetWidget> {
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: Color(0xFF153172),
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional(0.0, 0.0),
-                      child: Container(
-                        width: 552.0,
+              body: Container(
+                decoration: BoxDecoration(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
                         decoration: BoxDecoration(
                           color: Color(0xFF153172),
                         ),
@@ -266,9 +266,9 @@ class _PasswordresetWidgetState extends State<PasswordresetWidget> {
                           ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

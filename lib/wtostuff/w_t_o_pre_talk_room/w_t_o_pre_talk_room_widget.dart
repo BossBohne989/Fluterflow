@@ -207,17 +207,16 @@ class _WTOPreTalkRoomWidgetState extends State<WTOPreTalkRoomWidget> {
                                                                               .transparent,
                                                                       onTap:
                                                                           () async {
+                                                                        FFAppState().TalkCountrie =
+                                                                            listViewTalkRoomRecord.teamIMG;
+                                                                        FFAppState().whichTheme =
+                                                                            listViewTalkRoomRecord.thema;
+                                                                        FFAppState().TalkTeam =
+                                                                            listViewTalkRoomRecord.teamIMG;
+                                                                        FFAppState().TalkTeamname =
+                                                                            listViewTalkRoomRecord.teamname;
                                                                         setState(
-                                                                            () {
-                                                                          FFAppState().TalkCountrie =
-                                                                              listViewTalkRoomRecord.teamIMG;
-                                                                          FFAppState().whichTheme =
-                                                                              listViewTalkRoomRecord.thema;
-                                                                          FFAppState().TalkTeam =
-                                                                              listViewTalkRoomRecord.teamIMG;
-                                                                          FFAppState().TalkTeamname =
-                                                                              listViewTalkRoomRecord.teamname;
-                                                                        });
+                                                                            () {});
                                                                         await listViewTalkRoomRecord
                                                                             .reference
                                                                             .delete();
@@ -571,10 +570,8 @@ class _WTOPreTalkRoomWidgetState extends State<WTOPreTalkRoomWidget> {
                                                   0.0, 0.0),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  setState(() {
-                                                    FFAppState().RoundRdy =
-                                                        true;
-                                                  });
+                                                  FFAppState().RoundRdy = true;
+                                                  setState(() {});
                                                 },
                                                 text: 'Start Game',
                                                 options: FFButtonOptions(
@@ -672,11 +669,10 @@ class _WTOPreTalkRoomWidgetState extends State<WTOPreTalkRoomWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              setState(() {
-                                                                FFAppState()
-                                                                        .RoundRdy =
-                                                                    false;
-                                                              });
+                                                              FFAppState()
+                                                                      .RoundRdy =
+                                                                  false;
+                                                              setState(() {});
                                                             },
                                                             text: 'No',
                                                             options:
@@ -754,12 +750,13 @@ class _WTOPreTalkRoomWidgetState extends State<WTOPreTalkRoomWidget> {
                                                                         createRoomRecordData(
                                                                   talkStart:
                                                                       false,
+                                                                  finishAgendaCreate:
+                                                                      true,
                                                                 ));
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .RoundRdy =
-                                                                      false;
-                                                                });
+                                                                FFAppState()
+                                                                        .RoundRdy =
+                                                                    false;
+                                                                setState(() {});
 
                                                                 context.pushNamed(
                                                                     'WTOHome');

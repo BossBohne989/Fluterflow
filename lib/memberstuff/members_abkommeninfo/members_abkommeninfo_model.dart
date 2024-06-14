@@ -7,7 +7,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'members_abkommeninfo_widget.dart' show MembersAbkommeninfoWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,9 +17,8 @@ class MembersAbkommeninfoModel
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  List<RoomRecord>? membersAbkommeninfoPreviousSnapshot;
   // Stores action output result for [Backend Call - Read Document] action in MembersAbkommeninfo widget.
-  RoomRecord? out;
+  AgreementRecord? agre;
 
   @override
   void initState(BuildContext context) {}

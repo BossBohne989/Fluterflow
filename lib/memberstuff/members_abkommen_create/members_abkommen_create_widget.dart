@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'members_abkommen_create_model.dart';
@@ -31,15 +30,6 @@ class _MembersAbkommenCreateWidgetState
     super.initState();
     _model = createModel(context, () => MembersAbkommenCreateModel());
 
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().checkboxtrue = [];
-        FFAppState().checkboxteam = [];
-        FFAppState().checkboxDisplayname = [];
-      });
-    });
-
     _model.textController1 ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
 
@@ -60,8 +50,12 @@ class _MembersAbkommenCreateWidgetState
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<RoomRecord>>(
-      stream: queryRoomRecord(
+    return FutureBuilder<List<RoomRecord>>(
+      future: queryRoomRecordOnce(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -111,8 +105,13 @@ class _MembersAbkommenCreateWidgetState
                               Expanded(
                                 child: Align(
                                   alignment: AlignmentDirectional(0.0, -1.0),
-                                  child: StreamBuilder<List<RoomRecord>>(
-                                    stream: queryRoomRecord(
+                                  child: FutureBuilder<List<RoomRecord>>(
+                                    future: queryRoomRecordOnce(
+                                      queryBuilder: (roomRecord) =>
+                                          roomRecord.where(
+                                        'JoinCode',
+                                        isEqualTo: FFAppState().GameCode,
+                                      ),
                                       singleRecord: true,
                                     ),
                                     builder: (context, snapshot) {
@@ -189,11 +188,11 @@ class _MembersAbkommenCreateWidgetState
                                                                           15.0,
                                                                           0.0,
                                                                           0.0),
-                                                                  child: StreamBuilder<
+                                                                  child: FutureBuilder<
                                                                       List<
                                                                           ChatRecord>>(
-                                                                    stream:
-                                                                        queryChatRecord(
+                                                                    future:
+                                                                        queryChatRecordOnce(
                                                                       queryBuilder:
                                                                           (chatRecord) =>
                                                                               chatRecord.where(
@@ -254,13 +253,6 @@ class _MembersAbkommenCreateWidgetState
                                                                                 Radius.circular(0.0),
                                                                             topRight:
                                                                                 Radius.circular(500.0),
-                                                                          ),
-                                                                          border:
-                                                                              Border.all(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            width:
-                                                                                1.0,
                                                                           ),
                                                                         ),
                                                                         child:
@@ -331,7 +323,7 @@ class _MembersAbkommenCreateWidgetState
                                                                             250.0),
                                                                     child: Image
                                                                         .asset(
-                                                                      'assets/images/wto-logo.png',
+                                                                      'assets/images/WorldTradeArena_Logo.png',
                                                                       width:
                                                                           75.0,
                                                                       height:
@@ -361,8 +353,15 @@ class _MembersAbkommenCreateWidgetState
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
+                                                              FFAppState()
+                                                                      .MemberPreHome =
+                                                                  false;
+                                                              FFAppState()
+                                                                      .MemberHome =
+                                                                  true;
+
                                                               context.pushNamed(
-                                                                  'MembersHome');
+                                                                  'MembersAllinOne');
                                                             },
                                                             text: 'Home',
                                                             options:
@@ -488,11 +487,10 @@ class _MembersAbkommenCreateWidgetState
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              setState(() {
-                                                                FFAppState()
-                                                                        .InfoText =
-                                                                    true;
-                                                              });
+                                                              FFAppState()
+                                                                      .InfoText =
+                                                                  true;
+                                                              setState(() {});
                                                             },
                                                             text: 'Infos',
                                                             options:
@@ -615,8 +613,18 @@ class _MembersAbkommenCreateWidgetState
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
+                                                              FFAppState()
+                                                                      .MemberAbkommen =
+                                                                  true;
+                                                              FFAppState()
+                                                                      .MemberPreHome =
+                                                                  false;
+                                                              FFAppState()
+                                                                      .MemberHome =
+                                                                  false;
+
                                                               context.pushNamed(
-                                                                  'MembersAbkommen');
+                                                                  'MembersAllinOne');
                                                             },
                                                             text: 'Agreement',
                                                             options:
@@ -695,7 +703,7 @@ class _MembersAbkommenCreateWidgetState
                                                                           8.0),
                                                               child:
                                                                   Image.asset(
-                                                                'assets/images/settings_blue.png',
+                                                                'assets/images/Bild_2024-05-29_145540621.png',
                                                                 width: 40.0,
                                                                 height: 40.0,
                                                                 fit: BoxFit
@@ -751,159 +759,165 @@ class _MembersAbkommenCreateWidgetState
                         flex: 7,
                         child: Align(
                           alignment: AlignmentDirectional(0.0, -1.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: StreamBuilder<List<UserRecord>>(
-                                    stream: queryUserRecord(
-                                      queryBuilder: (userRecord) =>
-                                          userRecord.where(
-                                        'uid',
-                                        isEqualTo: currentUserUid,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Container(
+                                  width: 100.0,
+                                  height: 598.0,
+                                  decoration: BoxDecoration(),
+                                  child: Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: FutureBuilder<List<UserRecord>>(
+                                      future: queryUserRecordOnce(
+                                        queryBuilder: (userRecord) =>
+                                            userRecord.where(
+                                          'uid',
+                                          isEqualTo: currentUserUid,
+                                        ),
+                                        singleRecord: true,
                                       ),
-                                      singleRecord: true,
-                                    ),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 50.0,
-                                            height: 50.0,
-                                            child: CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
                                               ),
                                             ),
+                                          );
+                                        }
+                                        List<UserRecord>
+                                            containerUserRecordList =
+                                            snapshot.data!;
+                                        final containerUserRecord =
+                                            containerUserRecordList.isNotEmpty
+                                                ? containerUserRecordList.first
+                                                : null;
+                                        return Container(
+                                          width: 558.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF153172),
                                           ),
-                                        );
-                                      }
-                                      List<UserRecord> containerUserRecordList =
-                                          snapshot.data!;
-                                      final containerUserRecord =
-                                          containerUserRecordList.isNotEmpty
-                                              ? containerUserRecordList.first
-                                              : null;
-                                      return Container(
-                                        width: 558.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF153172),
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  0.0, -1.0),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 540.0, 0.0, 0.0),
-                                                child: StreamBuilder<
-                                                    List<AgreementRecord>>(
-                                                  stream: queryAgreementRecord(
-                                                    singleRecord: true,
-                                                  ),
-                                                  builder: (context, snapshot) {
-                                                    // Customize what your widget looks like when it's loading.
-                                                    if (!snapshot.hasData) {
-                                                      return Center(
-                                                        child: SizedBox(
-                                                          width: 50.0,
-                                                          height: 50.0,
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                    Color>(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primary,
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: AlignmentDirectional(
+                                                    0.0, -1.0),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 540.0, 0.0, 0.0),
+                                                  child: FutureBuilder<
+                                                      List<AgreementRecord>>(
+                                                    future:
+                                                        queryAgreementRecordOnce(
+                                                      singleRecord: true,
+                                                    ),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      // Customize what your widget looks like when it's loading.
+                                                      if (!snapshot.hasData) {
+                                                        return Center(
+                                                          child: SizedBox(
+                                                            width: 50.0,
+                                                            height: 50.0,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primary,
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    }
-                                                    List<AgreementRecord>
-                                                        buttonAgreementRecordList =
-                                                        snapshot.data!;
-                                                    final buttonAgreementRecord =
-                                                        buttonAgreementRecordList
-                                                                .isNotEmpty
-                                                            ? buttonAgreementRecordList
-                                                                .first
-                                                            : null;
-                                                    return FFButtonWidget(
-                                                      onPressed: () async {
-                                                        var agreementRecordReference =
-                                                            AgreementRecord
-                                                                .collection
-                                                                .doc();
-                                                        await agreementRecordReference
-                                                            .set({
-                                                          ...createAgreementRecordData(
-                                                            title: _model
-                                                                .textController1
-                                                                .text,
-                                                            descripton: _model
-                                                                .textController2
-                                                                .text,
-                                                            statusCol: Color(
-                                                                0xFF1C1C1C),
-                                                            gameRoom:
-                                                                FFAppState()
-                                                                    .GameCode,
-                                                          ),
-                                                          ...mapToFirestore(
-                                                            {
-                                                              'Teams': FFAppState()
-                                                                  .checkboxteam,
-                                                              'UserIDs': _model
-                                                                  .checkboxCheckedItems
-                                                                  .map((e) =>
-                                                                      e.uid)
-                                                                  .toList(),
-                                                            },
-                                                          ),
-                                                        });
-                                                        _model.agreement =
-                                                            AgreementRecord
-                                                                .getDocumentFromData({
-                                                          ...createAgreementRecordData(
-                                                            title: _model
-                                                                .textController1
-                                                                .text,
-                                                            descripton: _model
-                                                                .textController2
-                                                                .text,
-                                                            statusCol: Color(
-                                                                0xFF1C1C1C),
-                                                            gameRoom:
-                                                                FFAppState()
-                                                                    .GameCode,
-                                                          ),
-                                                          ...mapToFirestore(
-                                                            {
-                                                              'Teams': FFAppState()
-                                                                  .checkboxteam,
-                                                              'UserIDs': _model
-                                                                  .checkboxCheckedItems
-                                                                  .map((e) =>
-                                                                      e.uid)
-                                                                  .toList(),
-                                                            },
-                                                          ),
-                                                        }, agreementRecordReference);
-                                                        if (buttonAgreementRecord
-                                                                ?.teams
-                                                                ?.contains(
-                                                                    containerUserRecord
-                                                                        ?.team) !=
-                                                            true) {
+                                                        );
+                                                      }
+                                                      List<AgreementRecord>
+                                                          buttonAgreementRecordList =
+                                                          snapshot.data!;
+                                                      final buttonAgreementRecord =
+                                                          buttonAgreementRecordList
+                                                                  .isNotEmpty
+                                                              ? buttonAgreementRecordList
+                                                                  .first
+                                                              : null;
+                                                      return FFButtonWidget(
+                                                        onPressed: () async {
+                                                          var agreementRecordReference =
+                                                              AgreementRecord
+                                                                  .collection
+                                                                  .doc();
+                                                          await agreementRecordReference
+                                                              .set({
+                                                            ...createAgreementRecordData(
+                                                              title: _model
+                                                                  .textController1
+                                                                  .text,
+                                                              descripton: _model
+                                                                  .textController2
+                                                                  .text,
+                                                              statusCol: Color(
+                                                                  0xFF1C1C1C),
+                                                              gameRoom:
+                                                                  FFAppState()
+                                                                      .GameCode,
+                                                            ),
+                                                            ...mapToFirestore(
+                                                              {
+                                                                'Teams':
+                                                                    FFAppState()
+                                                                        .checkboxteam,
+                                                                'UserIDs': _model
+                                                                    .checkboxCheckedItems
+                                                                    .map((e) =>
+                                                                        e.uid)
+                                                                    .toList(),
+                                                              },
+                                                            ),
+                                                          });
+                                                          _model.agreement =
+                                                              AgreementRecord
+                                                                  .getDocumentFromData({
+                                                            ...createAgreementRecordData(
+                                                              title: _model
+                                                                  .textController1
+                                                                  .text,
+                                                              descripton: _model
+                                                                  .textController2
+                                                                  .text,
+                                                              statusCol: Color(
+                                                                  0xFF1C1C1C),
+                                                              gameRoom:
+                                                                  FFAppState()
+                                                                      .GameCode,
+                                                            ),
+                                                            ...mapToFirestore(
+                                                              {
+                                                                'Teams':
+                                                                    FFAppState()
+                                                                        .checkboxteam,
+                                                                'UserIDs': _model
+                                                                    .checkboxCheckedItems
+                                                                    .map((e) =>
+                                                                        e.uid)
+                                                                    .toList(),
+                                                              },
+                                                            ),
+                                                          }, agreementRecordReference);
+
                                                           await _model
                                                               .agreement!
                                                               .reference
@@ -912,8 +926,10 @@ class _MembersAbkommenCreateWidgetState
                                                               {
                                                                 'Teams': FieldValue
                                                                     .arrayUnion([
-                                                                  containerUserRecord
-                                                                      ?.team
+                                                                  valueOrDefault(
+                                                                      currentUserDocument
+                                                                          ?.team,
+                                                                      '')
                                                                 ]),
                                                                 'UserIDs':
                                                                     FieldValue
@@ -923,37 +939,96 @@ class _MembersAbkommenCreateWidgetState
                                                               },
                                                             ),
                                                           });
-                                                        }
+                                                          FFAppState()
+                                                                  .MemberAbkommen =
+                                                              true;
 
-                                                        context.pushNamed(
-                                                            'MembersAbkommen');
+                                                          context.pushNamed(
+                                                              'MembersAllinOne');
 
-                                                        setState(() {});
-                                                      },
-                                                      text: 'Create',
-                                                      options: FFButtonOptions(
-                                                        width: 189.0,
-                                                        height: 40.0,
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    24.0,
-                                                                    0.0,
-                                                                    24.0,
-                                                                    0.0),
-                                                        iconPadding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        color:
-                                                            Color(0xFF161616),
-                                                        textStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .titleSmall
+                                                          setState(() {});
+                                                        },
+                                                        text: 'Create',
+                                                        options:
+                                                            FFButtonOptions(
+                                                          width: 189.0,
+                                                          height: 40.0,
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      24.0,
+                                                                      0.0,
+                                                                      24.0,
+                                                                      0.0),
+                                                          iconPadding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          color:
+                                                              Color(0xFF161616),
+                                                          textStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleSmall
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                          elevation: 3.0,
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                            width: 1.0,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.0),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: AlignmentDirectional(
+                                                    0.0, -1.0),
+                                                child: Container(
+                                                  width: 326.0,
+                                                  height: 531.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFF1C1C1C),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                -1.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      20.0,
+                                                                      30.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            'Title',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
@@ -962,521 +1037,466 @@ class _MembersAbkommenCreateWidgetState
                                                                   letterSpacing:
                                                                       0.0,
                                                                 ),
-                                                        elevation: 3.0,
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: 1.0,
-                                                        ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  0.0, -1.0),
-                                              child: Container(
-                                                width: 326.0,
-                                                height: 531.0,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFF1C1C1C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                                child: Stack(
-                                                  children: [
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, -1.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    20.0,
-                                                                    30.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          'Title',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                color: Colors
-                                                                    .white,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                              ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.0, -1.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    8.0,
-                                                                    15.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 200.0,
-                                                          child: TextFormField(
-                                                            controller: _model
-                                                                .textController1,
-                                                            focusNode: _model
-                                                                .textFieldFocusNode1,
-                                                            autofocus: true,
-                                                            obscureText: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              labelText:
-                                                                  'Title...',
-                                                              labelStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        color: Colors
-                                                                            .black,
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                      ),
-                                                              hintStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                      ),
-                                                              enabledBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primary,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              errorBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .error,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              focusedErrorBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .error,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                            ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Colors
-                                                                      .black,
-                                                                  letterSpacing:
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      8.0,
+                                                                      15.0,
                                                                       0.0,
-                                                                ),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            validator: _model
-                                                                .textController1Validator
-                                                                .asValidator(
-                                                                    context),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, -1.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    15.0,
-                                                                    90.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          'description:',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                color: Colors
-                                                                    .white,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.0, -1.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    8.0,
-                                                                    110.0,
-                                                                    8.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 300.0,
-                                                          child: TextFormField(
-                                                            controller: _model
-                                                                .textController2,
-                                                            focusNode: _model
-                                                                .textFieldFocusNode2,
-                                                            autofocus: true,
-                                                            obscureText: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                      ),
-                                                              enabledBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primary,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              errorBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .error,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              focusedErrorBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .error,
-                                                                  width: 1.0,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                            ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Colors
-                                                                      .black,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                ),
-                                                            maxLines: 10,
-                                                            validator: _model
-                                                                .textController2Validator
-                                                                .asValidator(
-                                                                    context),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.0, -1.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    400.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 289.0,
-                                                          height: 109.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryBackground,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0),
-                                                          ),
-                                                          child: StreamBuilder<
-                                                              List<UserRecord>>(
-                                                            stream:
-                                                                queryUserRecord(
-                                                              queryBuilder:
-                                                                  (userRecord) =>
-                                                                      userRecord
-                                                                          .where(
-                                                                'Team_Leader',
-                                                                isEqualTo: true,
-                                                              ),
-                                                            ),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              // Customize what your widget looks like when it's loading.
-                                                              if (!snapshot
-                                                                  .hasData) {
-                                                                return Center(
-                                                                  child:
-                                                                      SizedBox(
-                                                                    width: 50.0,
-                                                                    height:
-                                                                        50.0,
-                                                                    child:
-                                                                        CircularProgressIndicator(
-                                                                      valueColor:
-                                                                          AlwaysStoppedAnimation<
-                                                                              Color>(
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .primary,
-                                                                      ),
+                                                                      0.0),
+                                                          child: Container(
+                                                            width: 200.0,
+                                                            child:
+                                                                TextFormField(
+                                                              controller: _model
+                                                                  .textController1,
+                                                              focusNode: _model
+                                                                  .textFieldFocusNode1,
+                                                              autofocus: true,
+                                                              obscureText:
+                                                                  false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                labelText:
+                                                                    'Title...',
+                                                                labelStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Readex Pro',
+                                                                      color: Colors
+                                                                          .black,
+                                                                      letterSpacing:
+                                                                          0.0,
                                                                     ),
+                                                                hintStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Readex Pro',
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                    ),
+                                                                enabledBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 1.0,
                                                                   ),
-                                                                );
-                                                              }
-                                                              List<UserRecord>
-                                                                  listViewUserRecordList =
-                                                                  snapshot
-                                                                      .data!;
-                                                              return ListView
-                                                                  .builder(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .zero,
-                                                                scrollDirection:
-                                                                    Axis.vertical,
-                                                                itemCount:
-                                                                    listViewUserRecordList
-                                                                        .length,
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        listViewIndex) {
-                                                                  final listViewUserRecord =
-                                                                      listViewUserRecordList[
-                                                                          listViewIndex];
-                                                                  return Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            30.0,
-                                                                            20.0,
-                                                                            30.0,
-                                                                            0.0),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                focusedBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primary,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                errorBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .error,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                focusedErrorBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .error,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                filled: true,
+                                                                fillColor:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .black,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              validator: _model
+                                                                  .textController1Validator
+                                                                  .asValidator(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                -1.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      15.0,
+                                                                      90.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            'description:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  color: Colors
+                                                                      .white,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      8.0,
+                                                                      110.0,
+                                                                      8.0,
+                                                                      0.0),
+                                                          child: Container(
+                                                            width: 300.0,
+                                                            child:
+                                                                TextFormField(
+                                                              controller: _model
+                                                                  .textController2,
+                                                              focusNode: _model
+                                                                  .textFieldFocusNode2,
+                                                              autofocus: true,
+                                                              obscureText:
+                                                                  false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                hintStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Readex Pro',
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                    ),
+                                                                enabledBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                focusedBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primary,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                errorBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .error,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                focusedErrorBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .error,
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                filled: true,
+                                                                fillColor:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .black,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                              maxLines: 10,
+                                                              validator: _model
+                                                                  .textController2Validator
+                                                                  .asValidator(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, -1.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      400.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Container(
+                                                            width: 289.0,
+                                                            height: 109.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryBackground,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0),
+                                                            ),
+                                                            child: FutureBuilder<
+                                                                List<
+                                                                    UserRecord>>(
+                                                              future:
+                                                                  queryUserRecordOnce(
+                                                                queryBuilder:
+                                                                    (userRecord) =>
+                                                                        userRecord
+                                                                            .where(
+                                                                  'Team_Leader',
+                                                                  isEqualTo:
+                                                                      true,
+                                                                ),
+                                                              ),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                // Customize what your widget looks like when it's loading.
+                                                                if (!snapshot
+                                                                    .hasData) {
+                                                                  return Center(
                                                                     child:
-                                                                        Container(
+                                                                        SizedBox(
                                                                       width:
-                                                                          16.0,
+                                                                          50.0,
                                                                       height:
-                                                                          43.0,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Color(
-                                                                            0xFF1C1C1C),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(20.0),
-                                                                      ),
+                                                                          50.0,
                                                                       child:
-                                                                          Stack(
-                                                                        children: [
-                                                                          Align(
-                                                                            alignment:
-                                                                                AlignmentDirectional(0.0, 0.0),
-                                                                            child:
-                                                                                Text(
-                                                                              listViewUserRecord.team,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                    fontFamily: 'Readex Pro',
-                                                                                    color: Colors.white,
-                                                                                    letterSpacing: 0.0,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                          ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20.0),
-                                                                            child:
-                                                                                Image.network(
-                                                                              listViewUserRecord.teamIMG,
-                                                                              width: 44.0,
-                                                                              height: 200.0,
-                                                                              fit: BoxFit.cover,
-                                                                            ),
-                                                                          ),
-                                                                          Align(
-                                                                            alignment:
-                                                                                AlignmentDirectional(0.81, 0.0),
-                                                                            child:
-                                                                                Theme(
-                                                                              data: ThemeData(
-                                                                                checkboxTheme: CheckboxThemeData(
-                                                                                  visualDensity: VisualDensity.compact,
-                                                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                                                  shape: RoundedRectangleBorder(
-                                                                                    borderRadius: BorderRadius.circular(20.0),
-                                                                                  ),
-                                                                                ),
-                                                                                unselectedWidgetColor: FlutterFlowTheme.of(context).secondaryText,
-                                                                              ),
-                                                                              child: Checkbox(
-                                                                                value: _model.checkboxValueMap[listViewUserRecord] ??= false,
-                                                                                onChanged: (newValue) async {
-                                                                                  setState(() => _model.checkboxValueMap[listViewUserRecord] = newValue!);
-                                                                                  if (newValue!) {
-                                                                                    FFAppState().addToCheckboxtrue(listViewUserRecord.uid);
-                                                                                    FFAppState().addToCheckboxteam(listViewUserRecord.team);
-                                                                                    FFAppState().addToCheckboxDisplayname(listViewUserRecord.displayName);
-                                                                                  } else {
-                                                                                    setState(() {
-                                                                                      FFAppState().removeFromCheckboxtrue(listViewUserRecord.uid);
-                                                                                      FFAppState().removeFromCheckboxteam(valueOrDefault(currentUserDocument?.team, ''));
-                                                                                      FFAppState().removeFromCheckboxDisplayname(currentUserDisplayName);
-                                                                                    });
-                                                                                  }
-                                                                                },
-                                                                                side: BorderSide(
-                                                                                  width: 2,
-                                                                                  color: FlutterFlowTheme.of(context).secondaryText,
-                                                                                ),
-                                                                                activeColor: Colors.black,
-                                                                                checkColor: FlutterFlowTheme.of(context).info,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                          CircularProgressIndicator(
+                                                                        valueColor:
+                                                                            AlwaysStoppedAnimation<Color>(
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .primary,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   );
-                                                                },
-                                                              );
-                                                            },
+                                                                }
+                                                                List<UserRecord>
+                                                                    listViewUserRecordList =
+                                                                    snapshot
+                                                                        .data!;
+                                                                return ListView
+                                                                    .builder(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  scrollDirection:
+                                                                      Axis.vertical,
+                                                                  itemCount:
+                                                                      listViewUserRecordList
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          listViewIndex) {
+                                                                    final listViewUserRecord =
+                                                                        listViewUserRecordList[
+                                                                            listViewIndex];
+                                                                    return Padding(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          30.0,
+                                                                          20.0,
+                                                                          30.0,
+                                                                          0.0),
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            16.0,
+                                                                        height:
+                                                                            43.0,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Color(0xFF1C1C1C),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20.0),
+                                                                        ),
+                                                                        child:
+                                                                            Stack(
+                                                                          children: [
+                                                                            Align(
+                                                                              alignment: AlignmentDirectional(0.0, 0.0),
+                                                                              child: Text(
+                                                                                listViewUserRecord.team,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      fontFamily: 'Readex Pro',
+                                                                                      color: Colors.white,
+                                                                                      letterSpacing: 0.0,
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                            ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(20.0),
+                                                                              child: Image.network(
+                                                                                listViewUserRecord.teamIMG,
+                                                                                width: 44.0,
+                                                                                height: 200.0,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                            Align(
+                                                                              alignment: AlignmentDirectional(0.81, 0.0),
+                                                                              child: Theme(
+                                                                                data: ThemeData(
+                                                                                  checkboxTheme: CheckboxThemeData(
+                                                                                    visualDensity: VisualDensity.compact,
+                                                                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(20.0),
+                                                                                    ),
+                                                                                  ),
+                                                                                  unselectedWidgetColor: FlutterFlowTheme.of(context).secondaryText,
+                                                                                ),
+                                                                                child: Checkbox(
+                                                                                  value: _model.checkboxValueMap[listViewUserRecord] ??= false,
+                                                                                  onChanged: (newValue) async {
+                                                                                    setState(() => _model.checkboxValueMap[listViewUserRecord] = newValue!);
+                                                                                    if (newValue!) {
+                                                                                      FFAppState().addToCheckboxtrue(listViewUserRecord.uid);
+                                                                                      FFAppState().addToCheckboxteam(listViewUserRecord.team);
+                                                                                      FFAppState().addToCheckboxDisplayname(listViewUserRecord.displayName);
+                                                                                    } else {
+                                                                                      FFAppState().removeFromCheckboxtrue(listViewUserRecord.uid);
+                                                                                      FFAppState().removeFromCheckboxteam(valueOrDefault(currentUserDocument?.team, ''));
+                                                                                      FFAppState().removeFromCheckboxDisplayname(currentUserDisplayName);
+                                                                                      setState(() {});
+                                                                                    }
+                                                                                  },
+                                                                                  side: BorderSide(
+                                                                                    width: 2,
+                                                                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                                                                  ),
+                                                                                  activeColor: Colors.black,
+                                                                                  checkColor: FlutterFlowTheme.of(context).info,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -1539,10 +1559,9 @@ class _MembersAbkommenCreateWidgetState
                                                         0.0, 5.0, 10.0, 0.0),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
-                                                    setState(() {
-                                                      FFAppState().InfoText =
-                                                          false;
-                                                    });
+                                                    FFAppState().InfoText =
+                                                        false;
+                                                    setState(() {});
                                                   },
                                                   text: 'Ok\n',
                                                   options: FFButtonOptions(

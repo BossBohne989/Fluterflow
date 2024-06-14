@@ -183,24 +183,23 @@ class _WTOTalkRoomWidgetState extends State<WTOTalkRoomWidget> {
                                                                   Colors
                                                                       .transparent,
                                                               onTap: () async {
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .TalkCountrie =
-                                                                      listViewTalkRoomRecord
-                                                                          .teamIMG;
-                                                                  FFAppState()
-                                                                          .whichTheme =
-                                                                      listViewTalkRoomRecord
-                                                                          .thema;
-                                                                  FFAppState()
-                                                                          .TalkTeam =
-                                                                      listViewTalkRoomRecord
-                                                                          .teamIMG;
-                                                                  FFAppState()
-                                                                          .TalkTeamname =
-                                                                      listViewTalkRoomRecord
-                                                                          .teamname;
-                                                                });
+                                                                FFAppState()
+                                                                        .TalkCountrie =
+                                                                    listViewTalkRoomRecord
+                                                                        .teamIMG;
+                                                                FFAppState()
+                                                                        .whichTheme =
+                                                                    listViewTalkRoomRecord
+                                                                        .thema;
+                                                                FFAppState()
+                                                                        .TalkTeam =
+                                                                    listViewTalkRoomRecord
+                                                                        .teamIMG;
+                                                                FFAppState()
+                                                                        .TalkTeamname =
+                                                                    listViewTalkRoomRecord
+                                                                        .teamname;
+                                                                setState(() {});
                                                                 await listViewTalkRoomRecord
                                                                     .reference
                                                                     .delete();
@@ -579,10 +578,8 @@ class _WTOTalkRoomWidgetState extends State<WTOTalkRoomWidget> {
                                                   0.0, 0.0),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  setState(() {
-                                                    FFAppState().RoundRdy =
-                                                        true;
-                                                  });
+                                                  FFAppState().RoundRdy = true;
+                                                  setState(() {});
                                                 },
                                                 text: 'Next Round',
                                                 options: FFButtonOptions(
@@ -680,11 +677,10 @@ class _WTOTalkRoomWidgetState extends State<WTOTalkRoomWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              setState(() {
-                                                                FFAppState()
-                                                                        .RoundRdy =
-                                                                    false;
-                                                              });
+                                                              FFAppState()
+                                                                      .RoundRdy =
+                                                                  false;
+                                                              setState(() {});
                                                             },
                                                             text: 'No',
                                                             options:
@@ -749,29 +745,28 @@ class _WTOTalkRoomWidgetState extends State<WTOTalkRoomWidget> {
                                                           child: FFButtonWidget(
                                                             onPressed:
                                                                 () async {
-                                                              if (wTOTalkRoomRoomRecord
+                                                              await wTOTalkRoomRoomRecord!
+                                                                  .reference
+                                                                  .update(
+                                                                      createRoomRecordData(
+                                                                talkStart:
+                                                                    false,
+                                                                whichRound: functions
+                                                                    .updateRound(
+                                                                        rowRoomRecord!
+                                                                            .whichRound),
+                                                              ));
+                                                              if (rowRoomRecord
                                                                       ?.whichRound ==
-                                                                  wTOTalkRoomRoomRecord
+                                                                  rowRoomRecord
                                                                       ?.howManyRounds) {
                                                                 context.pushNamed(
                                                                     'WTOCommunique');
                                                               } else {
-                                                                await wTOTalkRoomRoomRecord!
-                                                                    .reference
-                                                                    .update(
-                                                                        createRoomRecordData(
-                                                                  talkStart:
-                                                                      false,
-                                                                  whichRound: functions
-                                                                      .updateRound(
-                                                                          rowRoomRecord!
-                                                                              .whichRound),
-                                                                ));
-                                                                setState(() {
-                                                                  FFAppState()
-                                                                          .RoundRdy =
-                                                                      false;
-                                                                });
+                                                                FFAppState()
+                                                                        .RoundRdy =
+                                                                    false;
+                                                                setState(() {});
 
                                                                 context.pushNamed(
                                                                     'WTOHome');

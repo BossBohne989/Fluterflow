@@ -44,8 +44,14 @@ class _WTOPreAgendaWidgetState extends State<WTOPreAgendaWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<RoomRecord>>(
       stream: queryRoomRecord(
+        queryBuilder: (roomRecord) => roomRecord.where(
+          'JoinCode',
+          isEqualTo: FFAppState().GameCode,
+        ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -150,7 +156,7 @@ class _WTOPreAgendaWidgetState extends State<WTOPreAgendaWidget> {
                                   await wTOPreAgendaRoomRecord!.reference
                                       .update(createRoomRecordData(
                                     talkStart: true,
-                                    finishAgendaCreate: true,
+                                    finishAgendaCreate: false,
                                   ));
 
                                   context.pushNamed('WTOPreTalkRoom');
@@ -296,11 +302,16 @@ class _WTOPreAgendaWidgetState extends State<WTOPreAgendaWidget> {
                                                             (goalsRecord) =>
                                                                 goalsRecord
                                                                     .where(
-                                                          'TargetsToAgenda',
-                                                          isEqualTo:
-                                                              listViewSoloAgendaRecord
-                                                                  .agenda,
-                                                        ),
+                                                                      'TargetsToAgenda',
+                                                                      isEqualTo:
+                                                                          listViewSoloAgendaRecord
+                                                                              .agenda,
+                                                                    )
+                                                                    .where(
+                                                                      'private',
+                                                                      isEqualTo:
+                                                                          false,
+                                                                    ),
                                                       ),
                                                       builder:
                                                           (context, snapshot) {
@@ -467,6 +478,120 @@ class _WTOPreAgendaWidgetState extends State<WTOPreAgendaWidget> {
                                     },
                                   );
                                 },
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional(1.0, 0.0),
+                            child: Container(
+                              width: 353.0,
+                              height: 463.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context).accent2,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Player Ready List',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<List<UserRecord>>(
+                                        stream: queryUserRecord(
+                                          parent:
+                                              wTOPreAgendaRoomRecord?.reference,
+                                          queryBuilder: (userRecord) =>
+                                              userRecord.where(
+                                            'Team_Leader',
+                                            isEqualTo: true,
+                                          ),
+                                        ),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          List<UserRecord>
+                                              listViewUserRecordList =
+                                              snapshot.data!;
+                                          return ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount:
+                                                listViewUserRecordList.length,
+                                            itemBuilder:
+                                                (context, listViewIndex) {
+                                              final listViewUserRecord =
+                                                  listViewUserRecordList[
+                                                      listViewIndex];
+                                              return Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      listViewUserRecord
+                                                          .displayName,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      listViewUserRecord.isReady
+                                                          .toString(),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),

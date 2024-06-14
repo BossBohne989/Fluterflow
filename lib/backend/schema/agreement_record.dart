@@ -51,6 +51,11 @@ class AgreementRecord extends FirestoreRecord {
   List<String> get userIDs => _userIDs ?? const [];
   bool hasUserIDs() => _userIDs != null;
 
+  // "check" field.
+  int? _check;
+  int get check => _check ?? 0;
+  bool hasCheck() => _check != null;
+
   void _initializeFields() {
     _title = snapshotData['Title'] as String?;
     _descripton = snapshotData['Descripton'] as String?;
@@ -59,6 +64,7 @@ class AgreementRecord extends FirestoreRecord {
     _status = getDataList(snapshotData['Status']);
     _gameRoom = snapshotData['GameRoom'] as String?;
     _userIDs = getDataList(snapshotData['UserIDs']);
+    _check = castToType<int>(snapshotData['check']);
   }
 
   static CollectionReference get collection =>
@@ -100,6 +106,7 @@ Map<String, dynamic> createAgreementRecordData({
   String? descripton,
   Color? statusCol,
   String? gameRoom,
+  int? check,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -107,6 +114,7 @@ Map<String, dynamic> createAgreementRecordData({
       'Descripton': descripton,
       'StatusCol': statusCol,
       'GameRoom': gameRoom,
+      'check': check,
     }.withoutNulls,
   );
 
@@ -125,7 +133,8 @@ class AgreementRecordDocumentEquality implements Equality<AgreementRecord> {
         e1?.statusCol == e2?.statusCol &&
         listEquality.equals(e1?.status, e2?.status) &&
         e1?.gameRoom == e2?.gameRoom &&
-        listEquality.equals(e1?.userIDs, e2?.userIDs);
+        listEquality.equals(e1?.userIDs, e2?.userIDs) &&
+        e1?.check == e2?.check;
   }
 
   @override
@@ -136,7 +145,8 @@ class AgreementRecordDocumentEquality implements Equality<AgreementRecord> {
         e?.statusCol,
         e?.status,
         e?.gameRoom,
-        e?.userIDs
+        e?.userIDs,
+        e?.check
       ]);
 
   @override

@@ -208,3 +208,50 @@ int subPlayerinTeam(int playerInTeam) {
   int nowPlayerInTeam = playerInTeam - 1;
   return nowPlayerInTeam;
 }
+
+int checkcounter(int check) {
+  return check += 1;
+}
+
+bool checkused(
+  List<String> uID,
+  String authID,
+  List<bool> status,
+) {
+  if (status.length != 0) {
+    for (int i = 0; i < uID.length; i++) {
+      if (uID[i] == authID) {
+        return status[i];
+      }
+    }
+  }
+  return false;
+}
+
+String deleteUserID(
+  String userid,
+  String authid,
+) {
+  for (int i = 0; i < userid.length; i++) {
+    if (userid[i] == authid) {
+      userid = "";
+    }
+  }
+  return userid;
+}
+
+bool checkagrement(
+  List<String> userid,
+  String authid,
+  List<bool> agree,
+) {
+  int value = 0;
+  for (int i = 0; i < userid.length; i++) {
+    if (userid[i] == authid) {
+      value = i;
+      break;
+    }
+  }
+
+  return agree[value];
+}

@@ -287,9 +287,8 @@ class _WTOCommuniqueWidgetState extends State<WTOCommuniqueWidget> {
                                           : null;
                                   return FFButtonWidget(
                                     onPressed: () async {
-                                      setState(() {
-                                        FFAppState().EndGame = true;
-                                      });
+                                      FFAppState().EndGame = true;
+                                      setState(() {});
                                     },
                                     text: 'End Game',
                                     options: FFButtonOptions(
@@ -417,9 +416,8 @@ class _WTOCommuniqueWidgetState extends State<WTOCommuniqueWidget> {
                                                   0.0, 0.0, 150.0, 10.0),
                                           child: FFButtonWidget(
                                             onPressed: () async {
-                                              setState(() {
-                                                FFAppState().EndGame = false;
-                                              });
+                                              FFAppState().EndGame = false;
+                                              setState(() {});
                                             },
                                             text: 'No',
                                             options: FFButtonOptions(
